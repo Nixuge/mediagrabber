@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, send_file, render_template, redirect
 import yt_dlp as ytdl
 import traceback
 import time
@@ -29,6 +29,28 @@ class Utils:
         
         IS_GENERIC = not HAS_AUDIO_FORMAT and not HAS_VIDEO_FORMAT
         return HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC
+
+class Website:
+    @APP.route('/api/', defaults={'path': ''})
+    @APP.route('/api/<path:path>')
+    def catch_all_api(path):
+        return redirect("https://mediagrabber.nixuge.me/api/", code=302)
+
+    @APP.route('/', defaults={'path': ''})
+    @APP.route('/<path:path>')
+    def catch_all(path):
+        return redirect("https://mediagrabber.nixuge.me", code=302)
+    
+    @APP.route("/index")
+    @APP.route("/index.html")
+    @APP.route("/")
+    def index():
+        return render_template("api_index.html")
+
+    @APP.route("/api/")
+    def api_index():
+        return render_template("index.html")
+
 
 class Global:
     @APP.route("/api/get_current_version")
@@ -306,7 +328,6 @@ class Youtube:
             print(type(e))
             print("TRYING AS MKV")
             return Youtube._get_video("mkv", format_id, url)
-
 
 if __name__ == "__main__":
     APP.run(host="0.0.0.0", port=12345)
