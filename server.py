@@ -1,16 +1,14 @@
 #!/usr/local/bin/python3
 
-from server import Flask, request, send_file, render_template
+from flask import Flask, request, send_file, render_template
 import yt_dlp as ytdl
 import traceback
 import time
 import os
-from gevent.pywsgi import WSGIServer
 
 APP = Flask(__name__)
-CURRENT_API_VERSION = 2
-CAV = f"v{CURRENT_API_VERSION}" #As a string + shorter
-CURRENT_SCRIPT_VERSION = "2.0"
+CAV = f"v2.1" #Current API version
+CURRENT_SCRIPT_VERSION = "2.1"
 
 class Utils:
     @staticmethod
@@ -255,57 +253,60 @@ class Youtube:
                 "value": f.get('format_id')
             }
         
+        final_formats["Choose custom value"] = {
+            "value": "CUSTOM"
+        }
+        
         return final_formats
+
+    @staticmethod
+    def _get_video(merge_output_format, format_id, url):
+        CURRENT_TIME = time.time_ns()
+
+        ydl_opts = {
+            'outtmpl': f"videos/{CURRENT_TIME}.%(ext)s", #.mov needed or else apple doesn't recognize it as a video (thanks apple)
+            'merge_output_format': merge_output_format,
+            'ffmpeg_location': '/usr/bin/ffmpeg',
+            "quiet": True
+        }
+        if format_id:
+            ydl_opts["format"] = format_id
+
+        #handle if audio format
+        with ytdl.YoutubeDL(ydl_opts) as ydl:
+            meta = ydl.extract_info(url)
+            formats = meta.get('formats', [meta])
+
+            #get the filemane in a dirty way since yt-dlp doesn't let us get it easily
+        FILE_NAME: str
+        for file in os.listdir("videos/"):
+            if str(CURRENT_TIME) in file:
+                FILE_NAME = file
+
+            
+        #if audio return as m4a, else return as mov
+        for f in formats:
+            if f.get("format_id") == format_id and f.get("resolution") == "audio only":
+                return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
+
+        return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
+
 
     @APP.route(f"/api/{CAV}/get_video")
     def get_video():
+        data = request.headers
+        format_id = data.get("id")
+        url = data.get("url")
+        if not url:
+            return "Please add an url or format id to your request headers."
         try:
-            data = request.headers
-            FORMAT_ID = data.get("id")
-            URL = data.get("url")
-            CURRENT_TIME = time.time_ns()
-
-            if not URL:
-                return "Please add an url or format id to your request headers."
-
-            ydl_opts = {
-                'outtmpl': f"videos/{CURRENT_TIME}.%(ext)s", #.mov needed or else apple doesn't recognize it as a video (thanks apple)
-                'merge_output_format': "mov",
-                'ffmpeg_location': '/usr/bin/ffmpeg',
-                "quiet": True
-            }
-            if FORMAT_ID:
-                ydl_opts["format"] = FORMAT_ID
-
-            #handle if audio format
-            with ytdl.YoutubeDL(ydl_opts) as ydl:
-                meta = ydl.extract_info(URL)
-                formats = meta.get('formats', [meta])
-
-            #get the filemane in a dirty way since yt-dlp doesn't let us get it easily
-            FILE_NAME: str
-            for file in os.listdir("videos/"):
-                if str(CURRENT_TIME) in file:
-                    FILE_NAME = file
-
-            
-            #if audio return as m4a, else return as mov
-            for f in formats:
-                if f.get("format_id") == FORMAT_ID and f.get("resolution") == "audio only":
-                    return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
-            
-            return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
+            return Youtube._get_video("mov", format_id, url)
         except Exception as e:
-            return e
+            print(e)
+            print(type(e))
+            print("TRYING AS MKV")
+            return Youtube._get_video("mkv", format_id, url)
 
 
 if __name__ == "__main__":
     APP.run(host="0.0.0.0", port=12345)
-
-#TODO:
-#save exceptions on 2nd req too
-#on shortcut: add an "always best" as option + handle audio/video for this
-
-#put shit on actual server and do the dns and shit
-
-#find a way to put audio-only on ios
