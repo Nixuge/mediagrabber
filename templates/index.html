@@ -10,7 +10,8 @@
 <body>
     <div class="split download">
         <div class="centered downloadDiv">
-            <h1>MediaGrabber - a simple script to download videos from the internet</h1>
+            <h1>MediaGrabber</h1>
+            <h1>A simple iOS shortcut to download videos from the internet</h1>
             <a id="latestDownloadURL" class="button"
                 href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
                 <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
@@ -20,7 +21,7 @@
 
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.1.1</span>
-                    <span class="releaseDate">(06/09/2022)</span>
+                    <span class="releaseDate">(06/15/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
                         <div class="innerbutton noanimation">Download</div>
                     </a>
@@ -38,7 +39,7 @@
 
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.1</span>
-                    <span class="releaseDate">(06/09/2022)</span>
+                    <span class="releaseDate">(06/13/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
                         <div class="innerbutton noanimation">Download</div>
                     </a>
@@ -92,10 +93,13 @@
             </div>
 
             <a id="serverSource" class="button" href="https://github.com/nixuge/mediagrabber">
-                <div id="latestButton" class="innerbutton expandOutElement">Server source</div>
+                <div class="innerbutton expandOutElement">Server source</div>
+            </a>
+            <a id="originalSource" class="button" href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">
+                <div class="innerbutton expandOutElement">Supported websites</div>
             </a>
             <a id="originalSource" class="button" href="https://github.com/sayem314">
-                <div id="latestButton" class="innerbutton expandOutElement">Original</div>
+                <div class="innerbutton expandOutElement">Original</div>
             </a>
         </div>
     </div>
@@ -106,11 +110,13 @@
             <h1>API documentation</h1>
 
             <div id="apiEndpoints" onclick="toggleApi(this)">
-                <div class="GET">
-
+                <div class="endpoint GET">
+                    <span class="method GETmethod">GET</span>
+                    <span class="url">/api/v2.1/get_video</span>
                 </div>
-
-                <hr class="solid">
+                <div class="endpointInfo">
+                    <span class="Documentation"></span>
+                </div>
             </div>
 
 
@@ -149,15 +155,6 @@
         text-align: center;
     }
 
-    .download {
-        background-color: #111;
-    }
-
-    .api {
-        background-color: #222;
-    }
-
-
 
     /* UNC0VER */
     .expandOutElement {
@@ -169,6 +166,7 @@
 
     .button {
         text-decoration: none;
+        display: inline-block;
     }
 
     .innerbutton {
@@ -224,6 +222,7 @@
     html {
         background-color: #111;
         --tint-color: #CA3D02;
+        --tint-color-low: #a23100;
         --tint-color-fade: #6B2607;
         --semi-bold: 600;
         --tint-text-color: #FFF;
@@ -261,9 +260,33 @@
 
 <style>
     /* ENDPOINTS */
+
+    .method {
+        border-radius: 0px 5px 5px 0px;
+        padding: 5px !important;
+        padding-right: 10px !important;
+    }
+
+    .url {
+        
+    }
+
+
+    .GETmethod {
+        display: inline-block;
+        background-color: #0A487B;
+    }
+
+    .endpoint {
+        padding: 0px;
+        text-align: left;
+        cursor: pointer;
+    }
+
     .GET {
-        border-color: rgb(30, 65, 95);
-        background-color: rgb(33, 36, 37);
+        border: solid 1px #0A487B;
+        background-color: #031625;
+
     }
 </style>
 
