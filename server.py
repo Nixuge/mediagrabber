@@ -34,7 +34,7 @@ class Website:
     @APP.route('/api/', defaults={'path': ''})
     @APP.route('/api/<path:path>')
     def catch_all_api(path):
-        return redirect("https://mediagrabber.nixuge.me/api/", code=302)
+        return f"Invalid API path. Please make sure your API version is set correctly ({CAV}). Otherwise, see the documentation @ mediagrabber.nixuge.me/ (URL requested: /api/{path})"
 
     @APP.route('/', defaults={'path': ''})
     @APP.route('/<path:path>')
@@ -45,11 +45,8 @@ class Website:
     @APP.route("/index.html")
     @APP.route("/")
     def index():
-        return render_template("api_index.html")
-
-    @APP.route("/api/")
-    def api_index():
         return render_template("index.html")
+        
 
 
 class Global:
@@ -282,7 +279,7 @@ class Youtube:
         return final_formats
 
     @staticmethod
-    def _get_video(merge_output_format, format_id, url):
+    def _get_video(merge_output_format, format_id, url, force_to_format: str = "mov"):
         CURRENT_TIME = time.time_ns()
 
         ydl_opts = {
@@ -311,6 +308,13 @@ class Youtube:
             if f.get("format_id") == format_id and f.get("resolution") == "audio only":
                 return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
 
+        EXTENSION = FILE_NAME.split(".")[-1]
+
+        #dirty fix since apple doesn't want to save anything except .movs (& gifs) even if the codecs work
+        if force_to_format and not EXTENSION in ["gif"] and merge_output_format != "mkv":
+            DOWNLOAD_NAME = FILE_NAME.replace(EXTENSION, force_to_format)
+            return send_file(f"videos/{FILE_NAME}", download_name=f"{DOWNLOAD_NAME}")
+        
         return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
 
 
@@ -318,16 +322,25 @@ class Youtube:
     def get_video():
         data = request.headers
         format_id = data.get("id")
+
         url = data.get("url")
-        if not url:
-            return "Please add an url or format id to your request headers."
+        if not url: return "Please add an url or format id to your request headers."
+        
+        format_extension = data.get("format_extension ")
+        if not format_extension: format_extension = "mov"
+
+        #setup that way so that by default it retries as a mkv (which supports pretty much everything)
+        dont_retry_as_mkv = data.get("dont_retry_as_mkv")
+        
         try:
-            return Youtube._get_video("mov", format_id, url)
+            return Youtube._get_video(format_extension , format_id, url)
         except Exception as e:
-            print(e)
-            print(type(e))
-            print("TRYING AS MKV")
-            return Youtube._get_video("mkv", format_id, url)
+            if dont_retry_as_mkv:
+                return str(e)
+            else:
+                print("TRYING AS MKV")
+                return Youtube._get_video("mkv", format_id, url)
+
 
 if __name__ == "__main__":
     APP.run(host="0.0.0.0", port=12345)

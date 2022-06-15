@@ -4,13 +4,221 @@
 <head>
     <title>Mediagrabber - index</title>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 </head>
 
 <body>
+    <div class="split download">
+        <div class="centered downloadDiv">
+            <h1>MediaGrabber - a simple script to download videos from the internet</h1>
+            <a id="latestDownloadURL" class="button"
+                href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
+                <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
+            </a>
 
+            <div id="legacyReleases">
+            
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v2.0.1</span>
+                    <span class="releaseDate">(06/09/2022)</span>
+                    <a class="button right"
+                        href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
+                        <div class="innerbutton noanimation">Download</div>
+                    </a>
+                    <ul>
+                        <li>Now using changeable vars for the URLs</li>
+                        <li>Version check</li>
+                        <li>Fixed endpoints</li>
+                        <li>Fixed save for other formats</li>
+                        <li>Added an option to input a custom format to save</li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v2.0.1</span>
+                    <span class="releaseDate">(06/09/2022)</span>
+                    <a class="button right"
+                        href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
+                        <div class="innerbutton noanimation">Download</div>
+                    </a>
+                    <ul>
+                        <li>Hotfix for new URLs</li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v2.0</span>
+                    <span class="releaseDate">(06/08/2022)</span>
+                    <a class="button right"
+                        href="https://www.icloud.com/shortcuts/70e4ab2ae07249a7bc52a346beae4a9c">
+                        <div class="innerbutton noanimation">Download</div>
+                    </a>
+                    <ul>
+                        <li>Initial rewrite</li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v1.0</span>
+                    <a class="button right">
+                        <div class="innerbutton noanimation unavailable">Download</div>
+                    </a>
+                    <ul>
+                        <li>Initial release</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a id="serverSource" class="button" href="https://github.com/nixuge/mediagrabber">
+                <div id="latestButton" class="innerbutton expandOutElement">Server source</div>
+            </a>
+            <a id="originalSource" class="button" href="https://github.com/sayem314">
+                <div id="latestButton" class="innerbutton expandOutElement">Original</div>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="split api">
+        <div class="centered">
+            <h1>API documentation</h1>
+            <h2>CC</h2>
+        </div>
+    </div>
 </body>
 
 <style>
+    @media only screen and (min-width: 1000px) {
+        .split {
+            height: 100%;
+            width: 50%;
+            position: fixed;
+            z-index: 1;
+            top: 10;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
 
+        .download {
+            left: 0;
+        }
+
+        .api {
+            right: 0;
+        }
+    }
+
+    .centered>*>*,
+    .centered>*,
+    .centered {
+        height: auto;
+        margin: 0 auto;
+        padding: 10px;
+        position: relative;
+        text-align: center;
+    }
+
+    .download {
+        background-color: #111;
+    }
+
+    .api {
+        background-color: #222;
+    }
+
+
+
+    /* UNC0VER */
+    .expandOutElement {
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+        -webkit-animation: expandOut 1.6s;
+        animation: expandOut 1.6s;
+    }
+
+    .button {
+        text-decoration: none;
+    }
+
+    .innerbutton {
+        cursor: pointer;
+        color: var(--tint-text-color);
+        /* margin-top: 100px; */
+        border-radius: 100px;
+        padding: 15px 20px 15px 20px;
+        font-weight: var(--semi-bold);
+        background-color: var(--tint-color);
+        max-width: 150px;
+        transition: padding .15s ease;
+        -webkit-transition: padding .15s ease;
+        -moz-transition: padding .15s ease;
+        -o-transition: padding .15s ease;
+        -ms-transition: padding .15s ease;
+    }
+
+    .unavailable {
+        background-color: var(--tint-color-fade);
+        color: var(--tint-text-color-fade);
+        cursor: not-allowed;
+    }
+
+    .innerbutton:hover {
+        padding-left: 35px;
+        padding-right: 35px;
+    }
+
+    .noanimation:hover {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .right {
+        position: absolute;
+        right: 0px;
+    }
+
+    * {
+        font-family: -apple-system-font, BlinkMacSystemFont, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+        color: var(--tint-text-color);
+        margin: 0; /* would be better in a body tag tbh */
+    }
+
+    html {
+        --tint-color: #FC4C02;
+        --tint-color-fade: rgba(249, 75, 0, 0.512);
+        --semi-bold: 600;
+        --tint-text-color: #FFF;
+        --tint-text-color-fade: rgba(255, 255, 255, 0.777);
+    }
+
+
+    /* Old releases */
+    #legacyReleases {
+        border-radius: 5px;
+        display: block;
+        height: 40vh;
+        overflow: auto;
+    }
+
+    .releaseTableView {
+        padding-right: 120px;
+        text-align: left;
+    }
+
+    hr.solid {
+        border: 0;
+        border-top: 1px solid #fff;
+    }
+
+    .releaseVersion {
+        text-decoration: underline;
+    }
 </style>
+
 </html>
