@@ -224,7 +224,6 @@ class Youtube:
         final_formats = {
             "Auto best value from yt-dlp (recommended)": {
                 "value": "",
-                "format": "video"
             }
         }
         if HAS_AUDIO_FORMAT and HAS_VIDEO_FORMAT:
