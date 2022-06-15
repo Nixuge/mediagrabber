@@ -317,7 +317,6 @@ class Youtube:
         
         return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
 
-
     @APP.route(f"/api/{CAV}/get_video")
     def get_video():
         data = request.headers

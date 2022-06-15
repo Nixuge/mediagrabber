@@ -17,18 +17,36 @@
             </a>
 
             <div id="legacyReleases">
-            
+
                 <div class="releaseTableView">
-                    <span class="releaseVersion">v2.0.1</span>
+                    <span class="releaseVersion">v2.1.1</span>
                     <span class="releaseDate">(06/09/2022)</span>
-                    <a class="button right"
-                        href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
+                    <a class="button right" href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
                         <div class="innerbutton noanimation">Download</div>
                     </a>
                     <ul>
+                        <li>Server changes: <ul>
+                                <li>"dont_retry_as_mkv" header</li>
+                                <li>"format_extension" header</li>
+                                <li>Better handling of some cases (GIFs)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v2.1</span>
+                    <span class="releaseDate">(06/09/2022)</span>
+                    <a class="button right" href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
+                        <div class="innerbutton noanimation">Download</div>
+                    </a>
+                    <ul>
+                        <li>API version bump</li>
                         <li>Now using changeable vars for the URLs</li>
                         <li>Version check</li>
-                        <li>Fixed endpoints</li>
+                        <li>Fixed endpoints (2.0->2.1)</li>
                         <li>Fixed save for other formats</li>
                         <li>Added an option to input a custom format to save</li>
                     </ul>
@@ -39,8 +57,7 @@
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.0.1</span>
                     <span class="releaseDate">(06/09/2022)</span>
-                    <a class="button right"
-                        href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
+                    <a class="button right" href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
                         <div class="innerbutton noanimation">Download</div>
                     </a>
                     <ul>
@@ -53,8 +70,7 @@
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.0</span>
                     <span class="releaseDate">(06/08/2022)</span>
-                    <a class="button right"
-                        href="https://www.icloud.com/shortcuts/70e4ab2ae07249a7bc52a346beae4a9c">
+                    <a class="button right" href="https://www.icloud.com/shortcuts/70e4ab2ae07249a7bc52a346beae4a9c">
                         <div class="innerbutton noanimation">Download</div>
                     </a>
                     <ul>
@@ -88,7 +104,16 @@
     <div class="split api">
         <div class="centered">
             <h1>API documentation</h1>
-            <h2>CC</h2>
+
+            <div id="apiEndpoints" onclick="toggleApi(this)">
+                <div class="GET">
+
+                </div>
+
+                <hr class="solid">
+            </div>
+
+
         </div>
     </div>
 </body>
@@ -183,19 +208,26 @@
         right: 0px;
     }
 
+    #latestDownloadURL,
+    #legacyReleases,
+    #apiEndpoints {
+        font-size: 120%;
+    }
+
     * {
         font-family: -apple-system-font, BlinkMacSystemFont, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
         color: var(--tint-text-color);
-        margin: 0; /* would be better in a body tag tbh */
+        margin: 0;
+        /* would be better in a body tag tbh */
     }
 
     html {
         background-color: #111;
-        --tint-color: #FC4C02;
-        --tint-color-fade: rgba(249, 75, 0, 0.512);
+        --tint-color: #CA3D02;
+        --tint-color-fade: #6B2607;
         --semi-bold: 600;
         --tint-text-color: #FFF;
-        --tint-text-color-fade: rgba(255, 255, 255, 0.777);
+        --tint-text-color-fade: #CCBBB3;
     }
 
 
@@ -214,12 +246,32 @@
 
     hr.solid {
         border: 0;
-        border-top: 1px solid #fff;
+        border-top: 1px solid #303436;
     }
 
     .releaseVersion {
         text-decoration: underline;
     }
+
+    /* endpoints */
+    #apiEndpoints {
+        overflow: auto;
+    }
 </style>
+
+<style>
+    /* ENDPOINTS */
+    .GET {
+        border-color: rgb(30, 65, 95);
+        background-color: rgb(33, 36, 37);
+    }
+</style>
+
+<script>
+    function toggleApi(div) {
+        console.log(div);
+        // TODO
+    }
+</script>
 
 </html>
