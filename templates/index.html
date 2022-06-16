@@ -13,16 +13,45 @@
             <h1>MediaGrabber</h1>
             <h1>A simple iOS shortcut to download videos from the internet</h1>
             <a id="latestDownloadURL" class="button"
-                href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
+                href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
                 <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
             </a>
 
             <div id="legacyReleases">
 
                 <div class="releaseTableView">
+                    <span class="releaseVersion">v2.1.2</span>
+                    <span class="releaseDate">(06/16/2022)</span>
+                    <a class="button right" href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
+                        <div class="innerbutton noanimation">Download</div>
+                    </a>
+                    <ul>
+                        <li>Big server changes: 
+                            <ul>
+                                <li><b>REMOVED LEGACY V1 SUPPORT ON THE SERVER</b></li>
+                                <li>File cleaner<ul>
+                                        <li>
+                                            Before, the downloaded videos just stayed on the server indefinitely until I
+                                            deleted them manually, now they have an expiration date and get deleted
+                                            after 60s
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>Updated yt-dlp (2022.4.8 -> 2022.5.18)</li>
+                                <li>Proper logging</li>
+                                <li>Removed unused dependency</li>
+                                <li>Refactor</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
+                <div class="releaseTableView">
                     <span class="releaseVersion">v2.1.1</span>
                     <span class="releaseDate">(06/15/2022)</span>
-                    <a class="button right" href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
+                    <a class="button right" href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
                         <div class="innerbutton noanimation">Download</div>
                     </a>
                     <ul>
@@ -116,10 +145,10 @@
                 </div>
                 <div id="endpointInfo_get_current_version" class="endpointInfo">
                     <h3 class="underline">Result</h3>
-                    <span>The endpoint should return the current API/Script version as a simple string<br>As an example: v2.1</span>
+                    <span>The endpoint should return the current API/Script version as a simple string<br>As an example:
+                        v2.1</span>
                 </div>
             </div>
-
 
             <div id="get_best_qualities">
                 <div class="endpoint GET" onclick="toggle_api('endpointInfo_get_best_qualities')">
@@ -147,26 +176,33 @@
                     <span>The endpoint should return a dict (json) with the following structure:
                         <ul>
                             <li>Display name for the user<ul>
-                                <li>value: the format ID</li>
-                                <li>other (optional): Only on the "see all formats" key, made for easier handling on the iOS shortcut side. If present, value will always be True (but is irrelevant)</li>
-                            </ul></li>
+                                    <li>value: the format ID</li>
+                                    <li>other (optional): Only on the "see all formats" key, made for easier handling on
+                                        the iOS shortcut side. If present, value will always be True (but is irrelevant)
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                         <br>
                         As an example:
                         <ul>
                             <li>Best video (only)<ul>
-                                <li>value: bestvideo</li>
-                            </ul></li>
+                                    <li>value: bestvideo</li>
+                                </ul>
+                            </li>
                             <li>Best audio (only)<ul>
-                                <li>value: bestaudio</li>
-                            </ul></li>
+                                    <li>value: bestaudio</li>
+                                </ul>
+                            </li>
                             <li>Best video and best audio merged<ul>
-                                <li>value: bestvideo+bestaudio</li>
-                            </ul></li>
+                                    <li>value: bestvideo+bestaudio</li>
+                                </ul>
+                            </li>
                             <li>See all formats<ul>
-                                <li>value: null</li>
-                                <li>other: True</li>
-                            </ul></li>
+                                    <li>value: null</li>
+                                    <li>other: True</li>
+                                </ul>
+                            </li>
                         </ul>
                     </span>
                 </div>
@@ -198,27 +234,33 @@
                     <span>The endpoint should return a dict (json) with the following structure:
                         <ul>
                             <li>Display name for the user<ul>
-                                <li>value: the format ID</li>
-                            </ul></li>
+                                    <li>value: the format ID</li>
+                                </ul>
+                            </li>
                         </ul>
                         <br>
                         As an example:
                         <ul>
                             <li>303 (.webm) 1920x1080<ul>
-                                <li>value: 303</li>
-                            </ul></li>
+                                    <li>value: 303</li>
+                                </ul>
+                            </li>
                             <li>Choose custom value<ul>
-                                <li>value: CUSTOM</li>
-                            </ul></li>
+                                    <li>value: CUSTOM</li>
+                                </ul>
+                            </li>
                             <li>251 (.webm) audio only<ul>
-                                <li>value: 251</li>
-                            </ul></li>
+                                    <li>value: 251</li>
+                                </ul>
+                            </li>
                             <li>278 (.webm) 256x144"<ul>
-                                <li>value: 278</li>
-                            </ul></li>
+                                    <li>value: 278</li>
+                                </ul>
+                            </li>
                         </ul>
                         <br>
-                        Note that the "Choose custom value" entry will always be there and have a value of "CUSTOM" for easier handling on the iOS shortcut side.
+                        Note that the "Choose custom value" entry will always be there and have a value of "CUSTOM" for
+                        easier handling on the iOS shortcut side.
                     </span>
                 </div>
             </div>
@@ -293,13 +335,15 @@
             right: 0;
         }
     }
+
     @media only screen and (max-width: 1000px) {
         .api {
             padding-top: 100px;
         }
-        
+
 
     }
+
     .centered>*>*,
     .centered>*,
     .centered {
@@ -389,7 +433,7 @@
     #legacyReleases {
         border-radius: 5px;
         display: block;
-        height: 50%;
+        height: 55vh;
         overflow: auto;
     }
 
@@ -420,6 +464,7 @@
         padding: 5px !important;
         padding-right: 10px !important;
     }
+
     .GET {
         background-color: #031625;
     }

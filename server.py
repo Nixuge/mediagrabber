@@ -5,7 +5,6 @@ import threading
 from typing import Optional
 from flask import Flask, request, send_file, render_template, redirect
 import yt_dlp as ytdl
-import traceback
 import time
 import os
 import logging
