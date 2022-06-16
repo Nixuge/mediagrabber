@@ -1,5 +1,7 @@
 #!/usr/local/bin/python3
 
+from dataclasses import dataclass
+import threading
 from flask import Flask, request, send_file, render_template, redirect
 import yt_dlp as ytdl
 import traceback
@@ -46,159 +48,77 @@ class Website:
     @APP.route("/")
     def index():
         return render_template("index.html")
-        
-
 
 class Global:
     @APP.route("/api/get_current_version")
     def get_current_version():
         return CURRENT_SCRIPT_VERSION
 
-class YoutubeLegacy:
-    @APP.route("/api/v1/getQualities", methods=["POST"])
-    def getQualitiesV1():
-        try:
-            data = request.json
-            if not data.get("url"):
-                return "Please add an URL to your request"
-
-            formatType = str(data.get("formatType")).lower()
-            #none = default (full dict)
-
-            url = data["url"]
-
-            bestQualities = []
-
-            _spaces = (60-len(f"Best quality _ for 123456"))*" "
-
-            if "reddit.com" in url:
-                bestQualities.append("Best quality 2 for Reddit" + _spaces + "[ID:bestvideo]")
-                bestQualities.append("Best quality 1 for Reddit" + _spaces + "[ID:bestvideo+bestaudio]")
-            elif "twitter.com" in url:
-                bestQualities.append("Best quality for Twitter" + _spaces + "[ID:best]")
-            elif "youtube.com" in url or "youtu.be" in url:
-                bestQualities.append("Best audio quality for Youtube" + _spaces + "[ID:bestaudio]")
-                bestQualities.append("Best video quality for Youtube" + _spaces + "[ID:bestvideo+bestaudio]")
 
 
+@dataclass
+class Video:
+    name: str #name WITHOUT EXTENSION
+    expiration_date: int
 
-            with ytdl.YoutubeDL({}) as ydl:
-                meta = ydl.extract_info(url, download=False)
-                _formats = meta.get('formats', [meta])
-                formats = []
-                
-                if formatType == "ios":
-
-                    formats.append("[ID:bestvideo]")
-                    formats.append("[ID:best]")
-                    formats.append("[ID:bestvideo+bestaudio]")
-                    formats.append("[ID:bestaudio]")
-
-                    for format in _formats:
-                        res = str(format.get("resolution"))
-                        id = " [ID:" + str(format.get("format_id")) + "]"
-                        codecs = ""
-                        fps = ""
-                        filesize = ""
-                        ext = ""
-
-                        if format.get("fps"):
-                            fps = " - " + str(format.get("fps")) + "fps"
-
-                        if format.get("filesize"):
-                            filesize = " (" + Utils.keep2DigitsAfterPeriod(int(format.get("filesize")) / 1000000) + "MB)"
-
-                        if format.get("ext"):
-                            ext = f" (" + format.get("ext") + ")"
-
-                        spaces = (50-len(f"{res}{fps}{filesize}{ext}{id}"))*" " #60 seems reasonable
-
-                        vcodec = str(format.get("vcodec"))
-                        acodec = str(format.get("acodec"))
-                        if vcodec != "none" and acodec != "none":
-                            codecs = spaces + f"vcodec:{vcodec} | acodec:{acodec}"
-                        elif vcodec != "none":
-                            codecs = spaces + "vcodec:"+vcodec
-                        elif acodec != "none":
-                            codecs = spaces + "acodec:"+acodec
-
-                        formats.append(f"{res}{fps}{filesize}{ext}{id}{codecs}")
-
-                    for form in bestQualities:
-                        formats.append(form)
-
-                    formats = formats[::-1]
-                
-                else: #if format none
-                    for format in _formats:
-                        formats.append({
-                            "res": format.get("resolution"),
-                            "fps": format.get("fps"),
-                            "filesize": format.get("filesize"),
-                            "ext": format.get("ext"),
-                            "acodec": format.get("acodec"),
-                            "vcodec": format.get("vcodec"),
-                            "id": format.get("format_id"),
-                        })
-                    
-                    formats.append("[ID:bestvideo]")
-                    formats.append("[ID:bestaudio]")
-                    formats.append("[ID:bestvideo+bestaudio]")
-                    formats.append("[ID:best]")
-
-                    formats = formats[::-1]
-
-                return {"formats": formats}
-        except Exception:
-            return traceback.format_exc()
-
-    @APP.route("/api/v1/getVideo", methods=["GET"])
-    def getVideoV1():
-        try:
-            data = request.headers
-            format_id = data.get("id")
-            url = data.get("url")
-
-            if not url or not format_id:
-                return "Please add an url or format id to your header requests"
-
-            #convert = bool(data.get("convert")) USING WAY TOO MUCH CPU
-
-            prefeeredFormat = data.get("prefFormat")
-            if not prefeeredFormat:
-                prefeeredFormat = "mp4"
-
-            currentTime = time.time_ns()
-
-            ydl_opts = {
-                'outtmpl': f"videos/{currentTime}.%(ext)s",
-                'format': format_id,
-                'merge_output_format': prefeeredFormat,
-                'ffmpeg_location': 'ffmpeg',
-                "quiet": True
-            }
-
-            #handle audio 
-            if prefeeredFormat in ["mp3", "m4a"] or format_id == "bestaudio":
-                ydl_opts["format"] = "bestaudio[ext=m4a]/bestaudio[ext=mp3]"
-                ydl_opts["audio_quality"] = 0
-                ydl_opts["keepvideo"] = False
-
-            with ytdl.YoutubeDL(ydl_opts) as ydl:
-                ydl.download(url)
-
-            print("Done getting file.")
-
-            fileName = ""
-
-            for file in os.listdir("videos/"):
-                if str(currentTime) in file:
-                    fileName = file
-
-            return send_file(f"videos/{fileName}", download_name=f"{fileName}")
+    def __init__(self, name: str, expiration_date: int or None) -> None:
+        if expiration_date == None:
+            # expiration_date = (time.time_ns() + 120000000000) #set expiration date 120s in the future
+            expiration_date = (time.time_ns() + 20000000000) #set expiration date 20s in the future
         
-        except Exception:
-            return traceback.format_exc()
+        if type(name) != str:
+            name = str(name)
+
+        self.name = name
+        self.expiration_date = expiration_date
+
+
+#honestly not the fanciest
+#but wanted to keep it in 1 class and does the job :D
+class Cleaner:
+    videos_path = "videos"
+    _toClean: list[Video] = []
+    _thread: threading.Thread = None
+    _threadStop: bool = False
+
+    @staticmethod
+    def addVideo(video: Video) -> None:
+        if type(video) != Video: return
+        Cleaner._toClean.append(video)
+
+    @staticmethod
+    def runCleanerThread() -> None:
+        if Cleaner._thread != None: return #Already running
+        Cleaner._thread = threading.Thread(target=Cleaner.threadFunc)
+        Cleaner._thread.start()
+
+
+    @staticmethod
+    def stopCleanerThread() -> None:
+        if Cleaner._thread == None: return #Already stopped
+        Cleaner._threadStop = True
+        Cleaner._thread = None #don't think it's needed but clean up memory
+
+    @staticmethod
+    def threadFunc() -> None: #could make it as a diff class but honestly no need
+        print("Cleaner thread started !")
+        while True:
+            current_time = time.time_ns()
+
+            for video in Cleaner._toClean:
+                if video.expiration_date < current_time: #detection & clear from the list
+                    print(f"Video expired: {video.name}")
+                    Cleaner._toClean.remove(video)
+
+                    for file in os.listdir(f"{Cleaner.videos_path}/"): #clear the actual video file
+                        if video.name in file:
+                            print(f"Deleted video: {file}")
+                            os.remove(f"{Cleaner.videos_path}/{file}")
+                    
+            time.sleep(1) #ok stopping the thread since it's running along the main one
+
+
+
 
 class Youtube:
     @APP.route(f"/api/{CAV}/get_best_qualities")
@@ -280,6 +200,7 @@ class Youtube:
     @staticmethod
     def _get_video(merge_output_format, format_id, url, force_to_format: str = "mov"):
         CURRENT_TIME = time.time_ns()
+        Cleaner.addVideo(Video(CURRENT_TIME))
 
         ydl_opts = {
             'outtmpl': f"videos/{CURRENT_TIME}.%(ext)s", #.mov needed or else apple doesn't recognize it as a video (thanks apple)
@@ -341,4 +262,5 @@ class Youtube:
 
 
 if __name__ == "__main__":
+    Cleaner.runCleanerThread()
     APP.run(host="0.0.0.0", port=12345)
