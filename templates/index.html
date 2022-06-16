@@ -26,7 +26,7 @@
                         <div class="innerbutton noanimation">Download</div>
                     </a>
                     <ul>
-                        <li>Big server changes: 
+                        <li>Big server changes:
                             <ul>
                                 <li><b>REMOVED LEGACY V1 SUPPORT ON THE SERVER</b></li>
                                 <li>File cleaner<ul>
@@ -120,16 +120,22 @@
                     </ul>
                 </div>
             </div>
+            <div class="bottom_buttons">
+                <a id="serverSource" class="button" href="https://github.com/nixuge/mediagrabber">
+                    <div class="innerbutton expandOutElement">Server source</div>
+                </a>
+                <a id="originalSource" class="button"
+                    href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">
+                    <div class="innerbutton expandOutElement">Supported sites</div>
+                </a>
+                <a id="originalSource" class="button" href="https://nixuge.me">
+                    <div class="innerbutton expandOutElement">Main websites</div>
+                </a>
+                <a id="originalSource" class="button" href="https://github.com/sayem314">
+                    <div class="innerbutton expandOutElement">Original</div>
+                </a>
+            </div>
 
-            <a id="serverSource" class="button" href="https://github.com/nixuge/mediagrabber">
-                <div class="innerbutton expandOutElement">Server source</div>
-            </a>
-            <a id="originalSource" class="button" href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">
-                <div class="innerbutton expandOutElement">Supported websites</div>
-            </a>
-            <a id="originalSource" class="button" href="https://github.com/sayem314">
-                <div class="innerbutton expandOutElement">Original</div>
-            </a>
         </div>
     </div>
 
@@ -435,6 +441,8 @@
         display: block;
         height: 55vh;
         overflow: auto;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
     }
 
     .releaseTableView {
@@ -455,6 +463,13 @@
     #apiEndpoints {
         overflow: auto;
     }
+
+    .bottom_buttons {
+        border-radius: 10px;
+        background-color: #1a1a1a;
+        display: inline-flex;
+    }
+
 </style>
 
 <style>
