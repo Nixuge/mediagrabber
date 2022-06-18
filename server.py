@@ -9,7 +9,7 @@ import time
 import os
 import logging
 
-APP = Flask(__name__)
+app = Flask(__name__)
 CAV = f"v2.1" #Current API version
 CURRENT_SCRIPT_VERSION = "2.1"
 
@@ -25,6 +25,7 @@ logging.basicConfig(format=logger_format, level=logging.DEBUG)
 #avoid yt-dlp output
 ytdl_logger = logging.getLogger("ytdl-ignore")
 ytdl_logger.disabled = True
+
 
 class Utils:
     @staticmethod
@@ -46,25 +47,26 @@ class Utils:
         IS_GENERIC = not HAS_AUDIO_FORMAT and not HAS_VIDEO_FORMAT
         return HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC
 
+
 class Website:
-    @APP.route('/api/', defaults={'path': ''})
-    @APP.route('/api/<path:path>')
+    @app.route('/api/', defaults={'path': ''})
+    @app.route('/api/<path:path>')
     def catch_all_api(path):
         return f"Invalid API path. Please make sure your API version is set correctly ({CAV}). Otherwise, see the documentation @ mediagrabber.nixuge.me/ (URL requested: /api/{path})"
 
-    @APP.route('/', defaults={'path': ''})
-    @APP.route('/<path:path>')
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
     def catch_all(path):
         return redirect("https://mediagrabber.nixuge.me", code=302)
     
-    @APP.route("/index")
-    @APP.route("/index.html")
-    @APP.route("/")
+    @app.route("/index")
+    @app.route("/index.html")
+    @app.route("/")
     def index():
         return render_template("index.html")
 
 class Global:
-    @APP.route("/api/get_current_version")
+    @app.route("/api/get_current_version")
     def get_current_version():
         return CURRENT_SCRIPT_VERSION
 
@@ -85,7 +87,6 @@ class Video:
 
         self.name = name
         self.expiration_date = expiration_date
-
 
 #honestly not the fanciest
 #but wanted to keep it in 1 class and does the job :D
@@ -132,7 +133,7 @@ class Cleaner:
 
 
 class Youtube:
-    @APP.route(f"/api/{CAV}/get_best_qualities")
+    @app.route(f"/api/{CAV}/get_best_qualities")
     def get_best_qualities():
         logging.debug("Getting best qualities")
         headers_data = request.headers
@@ -184,7 +185,7 @@ class Youtube:
         return final_formats
 
 
-    @APP.route(f"/api/{CAV}/get_all_qualities")
+    @app.route(f"/api/{CAV}/get_all_qualities")
     def get_all_qualities():
         headers_data = request.headers
         URL = headers_data.get("url")
@@ -258,7 +259,7 @@ class Youtube:
         
         return send_file(f"videos/{FILE_NAME}", download_name=f"{FILE_NAME}")
 
-    @APP.route(f"/api/{CAV}/get_video")
+    @app.route(f"/api/{CAV}/get_video")
     def get_video():
         data = request.headers
         format_id = data.get("id")
@@ -288,4 +289,4 @@ class Youtube:
 
 if __name__ == "__main__":
     Cleaner.runCleanerThread()
-    APP.run(host="0.0.0.0", port=12345)
+    app.run(host="0.0.0.0", port=12345)
