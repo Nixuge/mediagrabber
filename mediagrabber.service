@@ -1,0 +1,16 @@
+[Unit]
+Description=MediaGrabber
+After=network.target
+
+[Service]
+SyslogIdentifier=mediagrabber
+Restart=always
+RestartSec=5
+Type=simple
+User=nix <- CHANGE TO THE USER YOU WANT THE PROGRAM TO RUN UNDER
+WorkingDirectory=/home/nix/webserver/mediagrabber <- CHANGE TO YOUR WORKING DIR
+ExecStart=/home/nix/webserver/mediagrabber/app.py <- CHANGE TO YOUR EXECUTABLE
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
