@@ -65,6 +65,13 @@ class Website:
     def index():
         return render_template("index.html")
 
+    @app.route("/doc")
+    @app.route("/doc.html")
+    @app.route("/documentation")
+    @app.route("/documentation.html")
+    def download():
+        return render_template("doc.html")
+
 class Global:
     @app.route("/api/get_current_version")
     def get_current_version():
