@@ -85,8 +85,9 @@ class Video:
 
     def __init__(self, name: str, expiration_date: Optional[int] = None) -> None:
         if expiration_date == None:
+            expiration_date = (time.time_ns() + 240000000000) #set expiration date 240s in the future
             # expiration_date = (time.time_ns() + 120000000000) #set expiration date 120s in the future
-            expiration_date = (time.time_ns() + 60000000000) #set expiration date 60s in the future
+            # expiration_date = (time.time_ns() + 60000000000) #set expiration date 60s in the future
             # expiration_date = (time.time_ns() + 20000000000) #set expiration date 20s in the future
         
         if type(name) != str:
