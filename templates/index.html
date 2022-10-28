@@ -168,12 +168,8 @@
                 <div id="latestButton" class="innerbutton expandOutElement">Download</div>
             </a><br>
 
-
+            <div class="biggerfont" id="quality_result"></div>
             <div id="loading" style="display: none;"></div>
-            <div class="biggerfont" id="quality_result">
-
-            </div>
-
         </div>
     </div>
 </body>
@@ -381,6 +377,9 @@
     const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
     const download_api = '/api/{{ current_api_version }}/get_video';
 
+    const result_element = document.getElementById("quality_result");
+
+
     function toggle_element(id, display_style) {
         if (typeof display_style === "undefined") {
             display_style = "block";
@@ -394,76 +393,102 @@
         }
     }
 
+
     async function download_video_id(requested_url, id) {
-        fetch(download_api, {
-            headers: { 
-                'url': requested_url,
-                'id': id
-            }
-        })
+        toggle_element("loading");
+        toggle_element("quality_result");
+
+        const headers_dict = {
+            'format_extension': 'mkv',
+            'url': requested_url,
+            'id': id
+        };
+
+        fetch(download_api, { headers: headers_dict })
             .then(res => res.blob())
             .then(blob => {
-                var file = window.URL.createObjectURL(blob);
+                const file = window.URL.createObjectURL(blob);
                 window.location.assign(file);
+                toggle_element("loading");
+                toggle_element("quality_result");
             });
     }
 
-    async function show_results() {
-        // Reset the bottom part
-        toggle_element("loading");
-        const result_element = document.getElementById("quality_result");
-        result_element.innerHTML = "";
 
-        // Request the provided link
-        const requested_url = document.getElementById("urlinput").value;
-        const best_result = await (await fetch(best_qualities_api, {
+    async function fetch_url_header(api_url, requested_url) {
+        return await fetch(api_url, {
             headers: {
                 'Content-Type': 'application/json',
                 'Content-type': 'text/json; charset="utf-8"',
                 'url': requested_url
             }
-        }));
+        });
+    }
+
+
+    async function show_results() {
+        // Reset the bottom part
+        toggle_element("loading");
+        result_element.innerHTML = "";
+
+        // Request the provided link
+        const requested_url = document.getElementById("urlinput").value;
+
+        const best_results = await fetch_url_header(best_qualities_api, requested_url);
+
         // Doesn't need to go further if link invalid
-        if (!best_result.ok) {
+        if (!best_results.ok) {
             result_element.innerHTML = "Invalid link.";
             result_element.className = "biggestfont";
             result_element.style.color = "#e70606";
-            result_element.style.textAlign = "center"
+            result_element.style.textAlign = "center";
+            toggle_element("loading");
             return;
         }
-        toggle_element("loading");
-
-        // Show the results
+        const results_json = await best_results.json();
 
 
         // If the code reaches here, the link is valid, so it displays all options.
-        const results_json = await best_result.json();
-
+        // Good old manual string building
         for (result in results_json) {
             if (result == "See all formats") continue;
 
             const id = results_json[result]["value"];
 
             result_element.innerHTML += `<div class='result'>
-                <a class='button' onclick='download_video_id("${requested_url}", "${id}")'>
+                <a class='button' onclick='download_video_id(\"${requested_url}\", \"${id}\")'>
                     <div class='innerbutton noanimation'>Download</div>
                 </a>
                 <label>${result}</label>`;
         }
+        result_element.innerHTML += `<div id="showmore" style='text_align: center;'>
+                <a class='button' onclick='show_more_results()'>
+                    <div class='innerbutton'>See more formats?</div>
+                </a>`;
+        
+        toggle_element("loading");
+    }
 
+    async function show_more_results() {
+        toggle_element("showmore");
+        toggle_element("loading");
+        const requested_url = document.getElementById("urlinput").value;
+        const all_result = await (await fetch_url_header(all_qualities_api, requested_url)).json();
 
-        result_element.innerHTML += `<div style='text_align: center;'>
-                <a class='button' onclick='TODO'>
-                    <div class='innerbutton noanimation'>See more formats?</div>
-                </a>`
+        // document.getElementById("showmore").re
+        for (result in all_result) {
+            if (result == "Choose custom value") continue;
+            const resolution = result.match("\\) (.*)")[1]
+            console.log(result);
+            console.log(resolution);
+        }
 
+        toggle_element("loading");
+       
     }
 </script>
 
 </html>
-
-
-
 
 
 </div>
