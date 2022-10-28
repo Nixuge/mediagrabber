@@ -144,9 +144,10 @@ class Youtube:
     def get_best_qualities():
         logging.debug("Getting best qualities")
         headers_data = request.headers
+        print(headers_data)
         # FORMAT_TYPE = str(headers_data.get("format_type"))
         # could implement, but this is mostly for ios tbh
-        URL = headers_data.get("url")
+        URL = headers_data.get("Requested-Url")
         if not URL:
             logging.error("Needs an URL")
             return "Please add an URL yo your request."
@@ -199,7 +200,7 @@ class Youtube:
     @app.route(f"/api/{CAV}/get_all_qualities")
     def get_all_qualities():
         headers_data = request.headers
-        URL = headers_data.get("url")
+        URL = headers_data.get("Requested-Url")
         if not URL:
             logging.error("Needs an URL")
             return "Please add an URL yo your request.", 400
@@ -276,18 +277,18 @@ class Youtube:
     @app.route(f"/api/{CAV}/get_video")
     def get_video():
         data = request.headers
-        format_id = data.get("id")
+        format_id = data.get("Id")
 
-        url = data.get("url")
+        url = data.get("Requested-Url")
         if not url: 
             logging.error("Needs an URL")
             return "Please add an url to your request headers.", 400
         
-        format_extension = data.get("format_extension")
+        format_extension = data.get("Format-Extension")
         if not format_extension: format_extension = "mov"
 
         #setup that way so that by default it retries as a mkv (which supports pretty much everything)
-        dont_retry_as_mkv = data.get("dont_retry_as_mkv")
+        dont_retry_as_mkv = data.get("Dont_Retry_As_Mkv")
         
 
         try:

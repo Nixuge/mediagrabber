@@ -412,9 +412,8 @@
         static async fetch_url_header(api_url, requested_url) {
             return await fetch(api_url, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Content-type': 'text/json; charset="utf-8"',
-                    'url': requested_url
+                    'Content-Type': 'text/json; charset="utf-8"',
+                    'Requested-Url': requested_url
                 }
             });
         }
@@ -423,9 +422,9 @@
             Utilities.toggle_elements(["loading", "quality_result"]);
 
             const headers_dict = {
-                'format_extension': 'mkv',
-                'url': requested_url,
-                'id': id
+                'Format-Extension': 'mkv',
+                'Requested-Url': requested_url,
+                'Id': id
             };
 
             // console.log(headers_dict);
