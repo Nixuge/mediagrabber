@@ -63,7 +63,7 @@ class Website:
     @app.route("/index.html")
     @app.route("/")
     def index():
-        return render_template("index.html")
+        return render_template("index.html", current_api_version=CAV)
 
     @app.route("/doc")
     @app.route("/doc.html")
@@ -153,7 +153,11 @@ class Youtube:
 
 
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
-            meta = ydl.extract_info(URL, download=False)
+            try:
+                meta = ydl.extract_info(URL, download=False)
+            except Exception as e:
+                return f"Exception happened! {e}", 400
+            
             formats = meta.get('formats', [meta])
         
         #get info about the media
@@ -198,10 +202,13 @@ class Youtube:
         URL = headers_data.get("url")
         if not URL:
             logging.error("Needs an URL")
-            return "Please add an URL yo your request."
+            return "Please add an URL yo your request.", 400
         
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
-            meta = ydl.extract_info(URL, download=False)
+            try:
+                meta = ydl.extract_info(URL, download=False)
+            except Exception as e:
+                return f"Exception happened! {e}", 400
             formats = meta.get('formats', [meta])
         
         final_formats = {}
@@ -274,7 +281,7 @@ class Youtube:
         url = data.get("url")
         if not url: 
             logging.error("Needs an URL")
-            return "Please add an url to your request headers."
+            return "Please add an url to your request headers.", 400
         
         format_extension = data.get("format_extension")
         if not format_extension: format_extension = "mov"
@@ -288,10 +295,13 @@ class Youtube:
         except Exception as e:
             logging.warning(f"Failed as a {format_extension} ({e})")
             if dont_retry_as_mkv:
-                return str(e)
+                return f"{e}", 400
             else:
                 logging.debug("Retrying as mkv")
-                return Youtube._get_video("mkv", format_id, url)
+                try:
+                    return Youtube._get_video("mkv", format_id, url)
+                except Exception as e:
+                    return f"Exception happened! {e}", 400
 
 
 if __name__ == "__main__":

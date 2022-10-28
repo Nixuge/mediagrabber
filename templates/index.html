@@ -160,13 +160,19 @@
     <div class="split directdl">
         <div class="centered directDiv">
             <h1>Direct download</h1>
-            <h1>Enter a link below to download it</h1>
-            <br>
-            <input class="biggerfont textinput" type="text" id="fname"><br><br>
+            <h1>Enter a link below to download it</h1><br>
 
-            <a class="button biggerfont" onclick="print()">
-                <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
-            </a>
+            <input id="urlinput" class="biggerfont textinput" type="text"><br>
+
+            <a class="button biggerfont" onclick="show_results()">
+                <div id="latestButton" class="innerbutton expandOutElement">Download</div>
+            </a><br>
+
+            
+            <div id="loading" style="display: none;"></div>
+            <div class="biggerfont" id="quality_result">
+
+            </div>
 
         </div>
     </div>
@@ -234,7 +240,10 @@
     .biggerfont {
         font-size: 120%;
     }
-    
+    .biggestfont {
+        font-size: 250%;
+    }
+
     hr.solid {
         border: 0;
         border-top: 1px solid #303436;
@@ -295,6 +304,7 @@
         overflow: auto;
         margin-top: 2vh;
         margin-bottom: 2vh;
+        border: 3px solid var(--tint-color);
     }
 
     .releaseTableView {
@@ -313,10 +323,90 @@
         margin-bottom: 20px;
     }
 </style>
+<style directdl>
+    
+
+    .textinput {
+        /* could be in global but only used in ddl part */
+        width: 90%;
+        background: #111;
+        color: #FFF;
+        border: 3px solid var(--tint-color);
+        border-radius: 10px;
+    }
+</style>
+<style loading>
+    /* from https://loading.io/css */
+    @keyframes lds-dual-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #loading{
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+    }
+
+    #loading:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid;
+        border-color: #FFF transparent #FFF transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+    }
+</style>
+
 
 <script>
-    function print() {
-        console.log("cc")
+    const api_link = '/api/{{ current_api_version }}/get_all_qualities';
+
+    function toggle_element(id, display_style) {
+        if (typeof display_style === "undefined") {
+            display_style = "block";
+        }
+
+        let elem = document.getElementById(id)
+        if (elem.style.display == "none") {
+            elem.style.display = display_style;
+        } else {
+            elem.style.display = "none";
+        }
+        
+    }
+    async function show_results() {
+        // Reset the bottom part
+        toggle_element("loading");
+        const result_element = document.getElementById("quality_result");
+        result_element.innerHTML = "";
+
+        // Request the provided link
+        const requested_url = document.getElementById("urlinput").value;
+        const answer = await (await fetch(api_link, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-type': 'text/json; charset="utf-8"',
+                'url': requested_url
+            }
+        }));
+        toggle_element("loading");
+
+        // Show the results
+        if (!answer.ok) {
+            result_element.innerHTML = "Invalid link.";
+            result_element.className = "biggestfont";
+            result_element.style.color = "#e70606";
+            return;
+        }
     }
 </script>
 
