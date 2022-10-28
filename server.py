@@ -145,7 +145,6 @@ class Youtube:
     def get_best_qualities():
         logging.debug("Getting best qualities")
         headers_data = request.headers
-        print(headers_data)
         # FORMAT_TYPE = str(headers_data.get("format_type"))
         # could implement, but this is mostly for ios tbh
         URL = headers_data.get("Requested-Url")
