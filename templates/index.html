@@ -202,13 +202,15 @@
 
             <div id="results_best_wrapper">
                 <div id="results_info"></div>
-                <div id="results_best"></div>
+                <div id="results_best_outer">
+                    <div id="results_best"></div>
+                </div>
             </div>
             <div id="showmore" style="text-align: center; display: none;">
                 <a class='button biggerfont' onclick='show_more_results()'>
                     <div class='innerbutton downloadbutton'>See more formats?</div>
                 </a>
-            </div>
+            </div><br>
             <div id="results_all"></div>
             <div id="loading" style="display: none;"></div>
         </div>
@@ -322,6 +324,7 @@
         -o-transition: padding .15s ease;
         -ms-transition: padding .15s ease;
     }
+
     .lessimportant {
         background-color: var(--tint-color-low);
     }
@@ -388,9 +391,13 @@
         border-radius: 15px;
     }
 
+
     #results_best {
-        /* text-align: left; */
-        padding-left: 10px;
+        background-color: #1a1a1a;
+        padding: 10px;
+        width: fit-content;
+        display: inline-block;
+        border-radius: 15px;
     }
 
     .textinput {
@@ -406,6 +413,8 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        background-color: #1a1a1a;
+        border-radius: 15px;
     }
 </style>
 <style loading>
@@ -457,6 +466,10 @@
             results_best.innerHTML = results_best.className = "";
             results_all.innerHTML = results_all.className = "";
             results_info.innerHTML = "";
+
+            results_all.style.display = "none";
+            results_info.style.display = "none";
+            results_best.style.display = "none";
         }
 
         static toggle_all_downloadbuttons() {
@@ -586,7 +599,8 @@
                 </a>`;
         }
         Utilities.toggle_button("ddlbutton")
-        Utilities.toggle_elements(["showmore", "loading"]);
+        Utilities.toggle_elements(["showmore", "loading", "results_info"]);
+        Utilities.toggle_element("results_best", "inline-block")
     }
 
     async function show_more_results() {
@@ -609,8 +623,11 @@
                 </a>`;
         }
 
+        Utilities.toggle_element("results_all", "inline-flex")
         Utilities.toggle_element("loading");
     }
+
+    Utilities.reset_results()
 </script>
 
 </html>
