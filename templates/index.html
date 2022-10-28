@@ -270,8 +270,7 @@
     .button {
         text-decoration: none;
         display: inline-block;
-        padding-left: 5px;
-        padding-right: 5px;
+        padding: 5px;
     }
 
     .innerbutton {
@@ -332,10 +331,10 @@
         width: 95%;
         border-radius: 20px;
     }
+
     .button_group {
         display: inline-flex;
     }
-
 </style>
 <style directdl>
     .result {
@@ -349,6 +348,12 @@
         color: #FFF;
         border: 3px solid var(--tint-color);
         border-radius: 10px;
+    }
+
+    #results_all {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 </style>
 <style loading>
@@ -427,7 +432,7 @@
         }
 
         static async download_video_id(requested_url, id) {
-            Utilities.toggle_elements(["loading", "quality_result"]);
+            Utilities.toggle_elements(["loading", "results_best", "results_all"]);
 
             const headers_dict = {
                 'Format-Extension': 'mkv',
@@ -440,7 +445,7 @@
                 .then(blob => {
                     const file = window.URL.createObjectURL(blob);
                     window.location.assign(file);
-                    Utilities.toggle_elements(["loading", "quality_result"]);
+                    Utilities.toggle_elements(["loading", "results_best", "results_all"]);
                 });
         }
     }

@@ -87,13 +87,8 @@ class Video:
         if expiration_date == None:
             expiration_date = (time.time_ns() + 240000000000) #set expiration date 240s in the future
             # expiration_date = (time.time_ns() + 120000000000) #set expiration date 120s in the future
-            # expiration_date = (time.time_ns() + 60000000000) #set expiration date 60s in the future
-            # expiration_date = (time.time_ns() + 20000000000) #set expiration date 20s in the future
-        
-        if type(name) != str:
-            name = str(name)
 
-        self.name = name
+        self.name = str(name)
         self.expiration_date = expiration_date
 
 #honestly not the fanciest
@@ -141,17 +136,32 @@ class Cleaner:
 
 
 class Youtube:
+    @app.route(f"/api/{CAV}/get_basic_info")
+    def get_basic_info():
+        headers_data = request.headers
+        URL = headers_data.get("Requested-Url")
+        if not URL:
+            logging.error("Needs an URL")
+            return "Please add an URL to your request.", 400
+        
+        logging.debug("Getting basic info for URL")
+        meta: dict
+        with ytdl.YoutubeDL({"quiet": True}) as ydl:
+            meta = ydl.extract_info(URL, download=False)
+        meta.get("")
+        
+
     @app.route(f"/api/{CAV}/get_best_qualities")
     def get_best_qualities():
-        logging.debug("Getting best qualities")
         headers_data = request.headers
         # FORMAT_TYPE = str(headers_data.get("format_type"))
         # could implement, but this is mostly for ios tbh
         URL = headers_data.get("Requested-Url")
         if not URL:
             logging.error("Needs an URL")
-            return "Please add an URL yo your request."
+            return "Please add an URL to your request.", 400
 
+        logging.debug(f"Getting best qualities for URL {URL}")
 
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
             try:
@@ -205,6 +215,8 @@ class Youtube:
             logging.error("Needs an URL")
             return "Please add an URL yo your request.", 400
         
+        logging.debug(f"Getting all qualities for URL {URL}")
+
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
             try:
                 meta = ydl.extract_info(URL, download=False)
