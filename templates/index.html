@@ -428,6 +428,8 @@
                 'id': id
             };
 
+            // console.log(headers_dict);
+
             fetch(download_api, { headers: headers_dict })
                 .then(res => res.blob())
                 .then(blob => {
@@ -449,7 +451,7 @@
         // Reset the bottom part & disable button
         Utilities.toggle_button("ddlbutton")
         Utilities.toggle_element("loading");
-        result_element.innerHTML = "";
+        result_element.innerHTML = result_element.className= "";
 
         // Request the provided link
         const requested_url = document.getElementById("urlinput").value;
