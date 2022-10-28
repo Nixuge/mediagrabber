@@ -195,12 +195,15 @@
 
             <input id="urlinput" class="biggerfont textinput" type="text"><br>
 
-            <a class="button biggerfont" onclick="show_results(event)">
+            <a class="button biggerfont" onclick="list_qualities(event)">
                 <div id="ddlbutton" class="innerbutton expandOutElement">List qualities</div>
             </a><br>
 
-            <div id="results_best"></div>
-            <br>
+
+            <div id="results_best_wrapper">
+                <div id="results_info"></div>
+                <div id="results_best"></div>
+            </div>
             <div id="showmore" style="text-align: center; display: none;">
                 <a class='button biggerfont' onclick='show_more_results()'>
                     <div class='innerbutton'>See more formats?</div>
@@ -241,6 +244,7 @@
 
     .button_group,
     .releaseTableView,
+    .innerbutton,
     .centered>*,
     .centered {
         height: auto;
@@ -265,6 +269,10 @@
         --semi-bold: 600;
         --tint-text-color: #FFF;
         --tint-text-color-fade: #CCBBB3;
+    }
+
+    img {
+        max-width: 100%;
     }
 
     .right {
@@ -314,7 +322,7 @@
         padding: 15px 20px 15px 20px;
         font-weight: var(--semi-bold);
         background-color: var(--tint-color);
-        /* max-width: 150px; */
+        max-width: 250px;
         transition: padding .15s ease;
         -webkit-transition: padding .15s ease;
         -moz-transition: padding .15s ease;
@@ -370,6 +378,18 @@
     }
 </style>
 <style directdl>
+    #results_best_wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    #results_info > *,
+    #results_info { 
+        border-radius: 15px;
+        background-color: #1a1a1a;
+        border-radius: 15px;
+    }
+
     #results_best {
         text-align: left;
     }
@@ -422,15 +442,28 @@
 
 
 <script>
-    const info_api = '/api/{{ current_api_version }}/get_all_qualities';
+    const info_api = '/api/{{ current_api_version }}/get_basic_info';
     const all_qualities_api = '/api/{{ current_api_version }}/get_all_qualities';
     const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
     const download_api = '/api/{{ current_api_version }}/get_video';
 
+    const results_info = document.getElementById("results_info");
     const results_best = document.getElementById("results_best");
     const results_all = document.getElementById("results_all");
+    
 
     class Utilities {
+        static reset_results() {
+            results_best.style = "";
+            results_best.innerHTML = results_best.className = "";
+            results_all.innerHTML = results_all.className = "";
+            results_info.innerHTML = "";
+        }
+
+        static toggle_buttons(ids) {
+            ids.forEach(id => Utilities.toggle_button(id))
+        }
+
         static toggle_button(button_id) {
             const element = document.getElementById(button_id);
             element.disabled = true;
@@ -467,6 +500,9 @@
                 }
             });
         }
+        static async fetch_url_header_json(api_url, requested_url) {
+            return (await APIUtilities.fetch_url_header(api_url, requested_url)).json()
+        }
 
         static async download_video_id(requested_url, id) {
             Utilities.toggle_elements(["loading", "results_best", "results_all"]);
@@ -488,22 +524,19 @@
     }
 
 
-    async function show_results(event) {
+    async function list_qualities(event) {
         if (Utilities.is_event_disabled(event)) { return; }
+
+        // Reset the bottom part & disable button
+        Utilities.reset_results()
+        Utilities.toggle_button("ddlbutton")
+        Utilities.toggle_element("loading");
 
         // Constants
         const requested_url = document.getElementById("urlinput").value;
+        const api_response = await APIUtilities.fetch_url_header(info_api, requested_url);
 
-        // Reset the bottom part & disable button
-        Utilities.toggle_button("ddlbutton")
-        Utilities.toggle_element("loading");
-        results_best.innerHTML = results_best.className = "";
-        results_all.innerHTML = results_all.className = "";
-
-        // Request the provided link
-        const api_response = await APIUtilities.fetch_url_header(best_qualities_api, requested_url);
-
-        // Doesn't need to go further if link invalid
+        // Big dirty block because yes
         if (!api_response.ok) {
             results_best.innerHTML = "Invalid link.";
             results_best.className = "biggestfont";
@@ -513,15 +546,33 @@
             Utilities.toggle_element("loading");
             return;
         }
-        const results_json = await api_response.json();
+
+        const api_json = await api_response.json();
+
+        results_info.innerHTML += `<img src="${api_json['thumbnail']}">
+        <label>"${api_json['title']}" from ${api_json['uploader']}</label><br>
+        <label>Website: ${api_json['extractor_key']}</label><br>
+        <label>Duration: ${api_json['extractor_key']}</label><br>
+        `
+        console.log(api_json);
 
 
-        // If the code reaches here, the link is valid, so it displays all options.
+        show_results()
+    }
+
+    async function show_results() {
+        // Constants
+        const requested_url = document.getElementById("urlinput").value;
+
+        // Request the provided link
+        const api_response = await APIUtilities.fetch_url_header_json(best_qualities_api, requested_url);
+
+
         // Good old manual string building
-        for (result in results_json) {
+        for (result in api_response) {
             if (result == "See all formats") continue;
 
-            const id = results_json[result]["value"];
+            const id = api_response[result]["value"];
 
             results_best.innerHTML += `<div class='result'>
                 <a class='button' onclick='APIUtilities.download_video_id(\"${requested_url}\", \"${id}\")'>
@@ -534,8 +585,10 @@
 
     async function show_more_results() {
         Utilities.toggle_elements(["showmore", "loading"]);
+        Utilities.toggle_button("ddlbutton")
+
         const requested_url = document.getElementById("urlinput").value;
-        const api_response = await (await APIUtilities.fetch_url_header(all_qualities_api, requested_url)).json();
+        const api_response = await APIUtilities.fetch_url_header_json(all_qualities_api, requested_url);
 
         for (result in api_response) {
             if (result == "Choose custom value") continue;
@@ -549,6 +602,7 @@
         }
 
         Utilities.toggle_element("loading");
+        Utilities.toggle_button("ddlbutton")
 
     }
 </script>
