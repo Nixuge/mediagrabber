@@ -124,7 +124,7 @@
                 <div class="releaseTableView">
                     <span class="releaseVersion">v1.0</span>
                     <a class="button right">
-                        <div class="innerbutton noanimation unavailable">Download</div>
+                        <div class="innerbutton noanimation disabled">Download</div>
                     </a>
                     <ul>
                         <li>Initial release</li>
@@ -165,10 +165,10 @@
             <input id="urlinput" class="biggerfont textinput" type="text"><br>
 
             <a class="button biggerfont" onclick="show_results()">
-                <div id="latestButton" class="innerbutton expandOutElement">Download</div>
+                <div id="ddlbutton" class="innerbutton expandOutElement">Download</div>
             </a><br>
 
-            <div class="biggerfont" id="quality_result"></div>
+            <div id="quality_result"></div>
             <div id="loading" style="display: none;"></div>
         </div>
     </div>
@@ -281,7 +281,7 @@
         -ms-transition: padding .15s ease;
     }
 
-    .unavailable {
+    .disabled {
         background-color: var(--tint-color-fade);
         color: var(--tint-text-color-fade);
         cursor: not-allowed;
@@ -326,7 +326,6 @@
     }
 </style>
 <style directdl>
-    #quality_result,
     .result {
         text-align: left;
     }
@@ -379,24 +378,33 @@
 
     const result_element = document.getElementById("quality_result");
 
-
-    function toggle_element(id, display_style) {
-        if (typeof display_style === "undefined") {
-            display_style = "block";
+    class Utilities {
+        static toggle_button(button_id) {
+            const element = document.getElementById(button_id);
+            element.disabled = true;
+            element.classList.contains("disabled") ?
+                element.classList.remove("disabled") :
+                element.classList.add("disabled");
         }
+        static toggle_elements(ids) {
+            ids.forEach(id => Utilities.toggle_element(id))
+        }
+        static toggle_element(id, display_style) {
+            if (typeof display_style === "undefined") {
+                display_style = "block";
+            }
 
-        let elem = document.getElementById(id)
-        if (elem.style.display == "none") {
-            elem.style.display = display_style;
-        } else {
-            elem.style.display = "none";
+            let elem = document.getElementById(id)
+            elem.style.display == "none" ?
+                elem.style.display = display_style :
+                elem.style.display = "none";
         }
     }
 
 
+
     async function download_video_id(requested_url, id) {
-        toggle_element("loading");
-        toggle_element("quality_result");
+        Utilities.toggle_elements(["loading", "quality_result"]);
 
         const headers_dict = {
             'format_extension': 'mkv',
@@ -409,8 +417,7 @@
             .then(blob => {
                 const file = window.URL.createObjectURL(blob);
                 window.location.assign(file);
-                toggle_element("loading");
-                toggle_element("quality_result");
+                Utilities.toggle_elements(["loading", "quality_result"]);
             });
     }
 
@@ -427,8 +434,10 @@
 
 
     async function show_results() {
-        // Reset the bottom part
-        toggle_element("loading");
+        // Reset the bottom part & disable button
+        // document.getElementById()
+        Utilities.toggle_button("ddlbutton")
+        Utilities.toggle_element("loading");
         result_element.innerHTML = "";
 
         // Request the provided link
@@ -442,7 +451,7 @@
             result_element.className = "biggestfont";
             result_element.style.color = "#e70606";
             result_element.style.textAlign = "center";
-            toggle_element("loading");
+            Utilities.toggle_element("loading");
             return;
         }
         const results_json = await best_results.json();
@@ -465,26 +474,30 @@
                 <a class='button' onclick='show_more_results()'>
                     <div class='innerbutton'>See more formats?</div>
                 </a>`;
-        
-        toggle_element("loading");
+
+        Utilities.toggle_element("loading");
     }
 
     async function show_more_results() {
-        toggle_element("showmore");
-        toggle_element("loading");
+        Utilities.toggle_elements(["showmore", "loading"]);
         const requested_url = document.getElementById("urlinput").value;
         const all_result = await (await fetch_url_header(all_qualities_api, requested_url)).json();
 
-        // document.getElementById("showmore").re
+
         for (result in all_result) {
             if (result == "Choose custom value") continue;
             const resolution = result.match("\\) (.*)")[1]
-            console.log(result);
-            console.log(resolution);
+            const format = result.match("\\((.*)\\)")[1]
+            const id = all_result[result]
+            result_element.innerHTML += `<div class='result'>
+                <a class='button' onclick='download_video_id(\"${requested_url}\", \"${id}\")'>
+                    <div class='innerbutton noanimation'>Download ${format}</div>
+                </a>
+                <label>${resolution}</label>`;
         }
 
-        toggle_element("loading");
-       
+        Utilities.toggle_element("loading");
+
     }
 </script>
 
