@@ -168,7 +168,7 @@
                 <div id="latestButton" class="innerbutton expandOutElement">Download</div>
             </a><br>
 
-            
+
             <div id="loading" style="display: none;"></div>
             <div class="biggerfont" id="quality_result">
 
@@ -237,9 +237,15 @@
         right: 0px;
     }
 
+    .left {
+        position: absolute;
+        left: 0px;
+    }
+
     .biggerfont {
         font-size: 120%;
     }
+
     .biggestfont {
         font-size: 250%;
     }
@@ -324,7 +330,10 @@
     }
 </style>
 <style directdl>
-    
+    #quality_result,
+    .result {
+        text-align: left;
+    }
 
     .textinput {
         /* could be in global but only used in ddl part */
@@ -347,7 +356,7 @@
         }
     }
 
-    #loading{
+    #loading {
         display: inline-block;
         width: 80px;
         height: 80px;
@@ -368,7 +377,9 @@
 
 
 <script>
-    const api_link = '/api/{{ current_api_version }}/get_all_qualities';
+    const all_qualities_api = '/api/{{ current_api_version }}/get_all_qualities';
+    const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
+    const download_api = '/api/{{ current_api_version }}/get_video';
 
     function toggle_element(id, display_style) {
         if (typeof display_style === "undefined") {
@@ -381,8 +392,22 @@
         } else {
             elem.style.display = "none";
         }
-        
     }
+
+    async function download_video_id(requested_url, id) {
+        fetch(download_api, {
+            headers: { 
+                'url': requested_url,
+                'id': id
+            }
+        })
+            .then(res => res.blob())
+            .then(blob => {
+                var file = window.URL.createObjectURL(blob);
+                window.location.assign(file);
+            });
+    }
+
     async function show_results() {
         // Reset the bottom part
         toggle_element("loading");
@@ -391,23 +416,54 @@
 
         // Request the provided link
         const requested_url = document.getElementById("urlinput").value;
-        const answer = await (await fetch(api_link, {
+        const best_result = await (await fetch(best_qualities_api, {
             headers: {
                 'Content-Type': 'application/json',
                 'Content-type': 'text/json; charset="utf-8"',
                 'url': requested_url
             }
         }));
-        toggle_element("loading");
-
-        // Show the results
-        if (!answer.ok) {
+        // Doesn't need to go further if link invalid
+        if (!best_result.ok) {
             result_element.innerHTML = "Invalid link.";
             result_element.className = "biggestfont";
             result_element.style.color = "#e70606";
+            result_element.style.textAlign = "center"
             return;
         }
+        toggle_element("loading");
+
+        // Show the results
+
+
+        // If the code reaches here, the link is valid, so it displays all options.
+        const results_json = await best_result.json();
+
+        for (result in results_json) {
+            if (result == "See all formats") continue;
+
+            const id = results_json[result]["value"];
+
+            result_element.innerHTML += `<div class='result'>
+                <a class='button' onclick='download_video_id("${requested_url}", "${id}")'>
+                    <div class='innerbutton noanimation'>Download</div>
+                </a>
+                <label>${result}</label>`;
+        }
+
+
+        result_element.innerHTML += `<div style='text_align: center;'>
+                <a class='button' onclick='TODO'>
+                    <div class='innerbutton noanimation'>See more formats?</div>
+                </a>`
+
     }
 </script>
 
 </html>
+
+
+
+
+
+</div>
