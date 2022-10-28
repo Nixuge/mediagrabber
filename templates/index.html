@@ -12,8 +12,7 @@
         <div class="centered downloadDiv">
             <h1>MediaGrabber</h1>
             <h1>A simple iOS shortcut to download videos from the internet</h1>
-            <a class="button biggerfont"
-                href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
+            <a class="button biggerfont" href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
                 <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
             </a>
 
@@ -158,13 +157,14 @@
     </div>
 
 
-    <div class="split api">
-        <div class="centered">
+    <div class="split directdl">
+        <div class="centered directDiv">
             <h1>Direct download</h1>
-            <h3>Enter a link below to download it</h3>
+            <h1>Enter a link below to download it</h1>
+            <br>
+            <input class="biggerfont textinput" type="text" id="fname"><br><br>
 
-            <a class="button biggerfont"
-                onclick="print()">
+            <a class="button biggerfont" onclick="print()">
                 <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
             </a>
 
@@ -172,7 +172,7 @@
     </div>
 </body>
 
-<style>
+<style global>
     @media only screen and (min-width: 1000px) {
         .split {
             height: 100%;
@@ -188,17 +188,15 @@
             left: 0;
         }
 
-        .api {
+        .directdl {
             right: 0;
         }
     }
 
     @media only screen and (max-width: 1000px) {
-        .api {
+        .directdl {
             padding-top: 100px;
         }
-
-
     }
 
     .centered>*>*,
@@ -211,8 +209,39 @@
         text-align: center;
     }
 
+    * {
+        font-family: -apple-system-font, BlinkMacSystemFont, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+        color: var(--tint-text-color);
+        margin: 0;
+        /* would be better in a body tag tbh */
+    }
 
-    /* UNC0VER */
+    html {
+        background-color: #111;
+        --tint-color: #CA3D02;
+        --tint-color-low: #a23100;
+        --tint-color-fade: #6B2607;
+        --semi-bold: 600;
+        --tint-text-color: #FFF;
+        --tint-text-color-fade: #CCBBB3;
+    }
+
+    .right {
+        position: absolute;
+        right: 0px;
+    }
+
+    .biggerfont {
+        font-size: 120%;
+    }
+    
+    hr.solid {
+        border: 0;
+        border-top: 1px solid #303436;
+    }
+</style>
+<style buttons>
+    /* partially from unc0ver.dev */
     .expandOutElement {
         animation-fill-mode: forwards;
         -webkit-animation-fill-mode: forwards;
@@ -256,34 +285,8 @@
         padding-left: 20px;
         padding-right: 20px;
     }
-
-    .right {
-        position: absolute;
-        right: 0px;
-    }
-
-    .biggerfont {
-        font-size: 120%;
-    }
-
-    * {
-        font-family: -apple-system-font, BlinkMacSystemFont, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
-        color: var(--tint-text-color);
-        margin: 0;
-        /* would be better in a body tag tbh */
-    }
-
-    html {
-        background-color: #111;
-        --tint-color: #CA3D02;
-        --tint-color-low: #a23100;
-        --tint-color-fade: #6B2607;
-        --semi-bold: 600;
-        --tint-text-color: #FFF;
-        --tint-text-color-fade: #CCBBB3;
-    }
-
-
+</style>
+<style ios>
     /* Old releases */
     #legacyReleases {
         border-radius: 5px;
@@ -299,11 +302,6 @@
         text-align: left;
     }
 
-    hr.solid {
-        border: 0;
-        border-top: 1px solid #303436;
-    }
-
     .releaseVersion {
         text-decoration: underline;
     }
@@ -314,7 +312,6 @@
         display: inline-flex;
         margin-bottom: 20px;
     }
-
 </style>
 
 <script>
