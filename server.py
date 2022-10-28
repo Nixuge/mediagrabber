@@ -10,8 +10,8 @@ import os
 import logging
 
 app = Flask(__name__)
-CAV = f"v2.1" #Current API version
-CURRENT_SCRIPT_VERSION = "2.1"
+CAV = f"v2.2" #Current API version
+CURRENT_SCRIPT_VERSION = "2.2"
 
 # LOGGING (for some reason logging.getLogger(__name__) doesn't work...)
 logging.addLevelName(logging.DEBUG, "\033[1;36m%s\033[1;0m" % logging.getLevelName(logging.DEBUG)) #37 = gray but blue good
@@ -74,8 +74,9 @@ class Website:
 
 class Global:
     @app.route("/api/get_current_version")
+    @app.route("/api/get_api_version")
     def get_current_version():
-        return CURRENT_SCRIPT_VERSION
+        return CAV
 
 
 @dataclass
@@ -148,8 +149,13 @@ class Youtube:
         meta: dict
         with ytdl.YoutubeDL({"quiet": True}) as ydl:
             meta = ydl.extract_info(URL, download=False)
-        meta.get("")
         
+        friendly_dict = {}
+        for key in ["thumbnail", "title", "uploader", "extractor_key", "duration"]:
+            if key in meta:
+                friendly_dict[key] = meta.get(key)
+        
+        return friendly_dict
 
     @app.route(f"/api/{CAV}/get_best_qualities")
     def get_best_qualities():

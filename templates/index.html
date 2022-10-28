@@ -174,6 +174,12 @@
             </a><br>
 
             <div id="results_best"></div>
+            <br>
+            <div id="showmore" style="text-align: center; display: none;">
+                <a class='button biggerfont' onclick='show_more_results()'>
+                    <div class='innerbutton'>See more formats?</div>
+                </a>
+            </div>
             <div id="results_all"></div>
             <div id="loading" style="display: none;"></div>
         </div>
@@ -256,6 +262,7 @@
     hr.solid {
         border: 0;
         border-top: 1px solid #303436;
+        margin-top: 10px;
     }
 </style>
 <style buttons>
@@ -337,8 +344,8 @@
     }
 </style>
 <style directdl>
-    .result {
-        /* text-align: left; */
+    #results_best {
+        text-align: left;
     }
 
     .textinput {
@@ -389,9 +396,13 @@
 
 
 <script>
+    const info_api = '/api/{{ current_api_version }}/get_all_qualities';
     const all_qualities_api = '/api/{{ current_api_version }}/get_all_qualities';
     const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
     const download_api = '/api/{{ current_api_version }}/get_video';
+
+    const results_best = document.getElementById("results_best");
+    const results_all = document.getElementById("results_all");
 
     class Utilities {
         static toggle_button(button_id) {
@@ -455,13 +466,13 @@
         if (Utilities.is_event_disabled(event)) { return; }
 
         // Constants
-        const results_best = document.getElementById("results_best");
         const requested_url = document.getElementById("urlinput").value;
 
         // Reset the bottom part & disable button
         Utilities.toggle_button("ddlbutton")
         Utilities.toggle_element("loading");
         results_best.innerHTML = results_best.className = "";
+        results_all.innerHTML = results_all.className = "";
 
         // Request the provided link
         const api_response = await APIUtilities.fetch_url_header(best_qualities_api, requested_url);
@@ -491,20 +502,14 @@
                     <div class='innerbutton'>Download ${result}</div>
                 </a>`;
         }
-        results_best.innerHTML += `<br><br><div id="showmore" style='text_align: center;'>
-                <a class='button biggerfont' onclick='show_more_results()'>
-                    <div class='innerbutton'>See more formats?</div>
-                </a>`;
-
         Utilities.toggle_button("ddlbutton")
-        Utilities.toggle_element("loading");
+        Utilities.toggle_elements(["showmore", "loading"]);
     }
 
     async function show_more_results() {
         Utilities.toggle_elements(["showmore", "loading"]);
         const requested_url = document.getElementById("urlinput").value;
         const api_response = await (await APIUtilities.fetch_url_header(all_qualities_api, requested_url)).json();
-        const results_all = document.getElementById("results_all");
 
         for (result in api_response) {
             if (result == "Choose custom value") continue;
@@ -530,6 +535,4 @@
     TODO:
     -custom format input
     -better buttons
-    -if possible button grid (flexbox or smth)
-
  -->
