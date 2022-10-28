@@ -382,9 +382,9 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
-    
-    #results_info > *,
-    #results_info { 
+
+    #results_info>*,
+    #results_info {
         border-radius: 15px;
         background-color: #1a1a1a;
         border-radius: 15px;
@@ -450,7 +450,7 @@
     const results_info = document.getElementById("results_info");
     const results_best = document.getElementById("results_best");
     const results_all = document.getElementById("results_all");
-    
+
 
     class Utilities {
         static reset_results() {
@@ -460,13 +460,20 @@
             results_info.innerHTML = "";
         }
 
+        static toggle_all_downloadbuttons() {
+            const buttons = document.getElementsByClassName("downloadbutton");
+            Array.from(buttons).forEach(button => {
+                button.classList.contains("disabled") ?
+                    button.classList.remove("disabled") :
+                    button.classList.add("disabled");
+            })
+        }
+
         static toggle_buttons(ids) {
             ids.forEach(id => Utilities.toggle_button(id))
         }
-
         static toggle_button(button_id) {
             const element = document.getElementById(button_id);
-            element.disabled = true;
             element.classList.contains("disabled") ?
                 element.classList.remove("disabled") :
                 element.classList.add("disabled");
@@ -475,7 +482,6 @@
         static toggle_elements(ids) {
             ids.forEach(id => Utilities.toggle_element(id))
         }
-
         static toggle_element(id, display_style) {
             if (typeof display_style === "undefined") display_style = "block";
 
@@ -505,7 +511,7 @@
         }
 
         static async download_video_id(requested_url, id) {
-            Utilities.toggle_elements(["loading", "results_best", "results_all"]);
+            Utilities.toggle_all_downloadbuttons();
 
             const headers_dict = {
                 'Format-Extension': 'mkv',
@@ -518,7 +524,7 @@
                 .then(blob => {
                     const file = window.URL.createObjectURL(blob);
                     window.location.assign(file);
-                    Utilities.toggle_elements(["loading", "results_best", "results_all"]);
+                    Utilities.toggle_all_downloadbuttons();
                 });
         }
     }
@@ -551,8 +557,7 @@
 
         results_info.innerHTML += `<img src="${api_json['thumbnail']}">
         <label>"${api_json['title']}" from ${api_json['uploader']}</label><br>
-        <label>Website: ${api_json['extractor_key']}</label><br>
-        <label>Duration: ${api_json['extractor_key']}</label><br>
+        <label>on ${api_json['extractor_key']} (${api_json['duration']})</label><br>
         `
         console.log(api_json);
 
@@ -576,7 +581,7 @@
 
             results_best.innerHTML += `<div class='result'>
                 <a class='button' onclick='APIUtilities.download_video_id(\"${requested_url}\", \"${id}\")'>
-                    <div class='innerbutton'>Download ${result}</div>
+                    <div class='innerbutton downloadbutton'>Download ${result}</div>
                 </a>`;
         }
         Utilities.toggle_button("ddlbutton")
@@ -586,10 +591,13 @@
     async function show_more_results() {
         Utilities.toggle_elements(["showmore", "loading"]);
         Utilities.toggle_button("ddlbutton")
+        Utilities.toggle_all_downloadbuttons();
 
         const requested_url = document.getElementById("urlinput").value;
         const api_response = await APIUtilities.fetch_url_header_json(all_qualities_api, requested_url);
 
+        Utilities.toggle_all_downloadbuttons();
+        
         for (result in api_response) {
             if (result == "Choose custom value") continue;
             const resolution = result.match("\\) (.*)")[1]
@@ -597,12 +605,13 @@
             const id = api_response[result]["value"]
             results_all.innerHTML += `<div class='result'>
                 <a class='button' onclick='APIUtilities.download_video_id(\"${requested_url}\", \"${id}\")'>
-                    <div class='innerbutton noanimation'>${resolution} ${format}</div>
+                    <div class='innerbutton downloadbutton noanimation'>${resolution} ${format}</div>
                 </a>`;
         }
 
         Utilities.toggle_element("loading");
         Utilities.toggle_button("ddlbutton")
+
 
     }
 </script>

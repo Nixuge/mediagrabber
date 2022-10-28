@@ -8,7 +8,7 @@ import yt_dlp as ytdl
 import time
 import os
 import logging
-
+from datetime import timedelta
 app = Flask(__name__)
 CAV = f"v2.2" #Current API version
 CURRENT_SCRIPT_VERSION = "2.2"
@@ -151,10 +151,13 @@ class Youtube:
             meta = ydl.extract_info(URL, download=False)
         
         friendly_dict = {}
-        for key in ["thumbnail", "title", "uploader", "extractor_key", "duration"]:
+        for key in ["thumbnail", "title", "uploader", "extractor_key"]:
             if key in meta:
                 friendly_dict[key] = meta.get(key)
         
+        if "duration" in meta:
+            friendly_dict["duration"] = str(timedelta(seconds=meta.get("duration")))
+
         return friendly_dict
 
     @app.route(f"/api/{CAV}/get_best_qualities")
