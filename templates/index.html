@@ -449,7 +449,7 @@
 </style>
 
 
-<script>
+<script constants>
     const info_api = '/api/{{ current_api_version }}/get_basic_info';
     const all_qualities_api = '/api/{{ current_api_version }}/get_all_qualities';
     const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
@@ -458,8 +458,8 @@
     const results_info = document.getElementById("results_info");
     const results_best = document.getElementById("results_best");
     const results_all = document.getElementById("results_all");
-
-
+</script>
+<script utilities>
     class Utilities {
         static reset_results() {
             results_best.style = "";
@@ -504,8 +504,8 @@
             return event.target.classList.contains("disabled");
         }
     }
-
-
+</script>
+<script apiutilities>
     class APIUtilities {
         static async fetch_url_header(api_url, requested_url) {
             return await fetch(api_url, {
@@ -542,7 +542,9 @@
                 });
         }
     }
-
+</script>
+<script main>
+    Utilities.reset_results()
 
     async function list_qualities(event) {
         if (Utilities.is_event_disabled(event)) { return; }
@@ -626,8 +628,6 @@
         Utilities.toggle_element("results_all", "inline-flex")
         Utilities.toggle_element("loading");
     }
-
-    Utilities.reset_results()
 </script>
 
 </html>
