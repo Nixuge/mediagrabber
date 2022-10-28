@@ -16,28 +16,28 @@
                 <div class="button_group">
                     <a class="button biggerfont"
                         href="https://www.icloud.com/shortcuts/2784ecd0f660442597d0aef2290cb71c">
-                        <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
+                        <div id="latestButton" class="innerbutton">Download latest version</div>
                     </a>
                 </div>
                 <br>
                 <div class="button_group">
                     <a class="button" href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">
-                        <div class="innerbutton expandOutElement">Supported sites</div>
+                        <div class="innerbutton lessimportant">Supported sites</div>
                     </a>
                     <a class="button" href="https://github.com/sayem314">
-                        <div class="innerbutton expandOutElement">Original</div>
+                        <div class="innerbutton lessimportant">Original</div>
                     </a>
                     <a class="button" href="https://nixuge.me">
-                        <div class="innerbutton expandOutElement">Main website</div>
+                        <div class="innerbutton lessimportant">Main website</div>
                     </a>
 
                 </div>
                 <div class="button_group">
                     <a class="button" href="https://github.com/nixuge/mediagrabber">
-                        <div class="innerbutton expandOutElement">Server source</div>
+                        <div class="innerbutton lessimportant">Server source</div>
                     </a>
                     <a class="button" href="/doc">
-                        <div class="innerbutton expandOutElement">API documentation</div>
+                        <div class="innerbutton lessimportant">API documentation</div>
                     </a>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                     <span class="releaseVersion">v2.2</span>
                     <span class="releaseDate">(29/10/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/2784ecd0f660442597d0aef2290cb71c">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>Added online direct download version</li>
@@ -74,7 +74,7 @@
                     <span class="releaseVersion">v2.1.3</span>
                     <span class="releaseDate">(03/09/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>Updated yt-dlp (2022.5.18 -> 2022.9.1)</li>
@@ -87,7 +87,7 @@
                     <span class="releaseVersion">v2.1.2</span>
                     <span class="releaseDate">(16/06/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>Big server changes:
@@ -116,7 +116,7 @@
                     <span class="releaseVersion">v2.1.1</span>
                     <span class="releaseDate">(15/06/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>Server changes: <ul>
@@ -134,7 +134,7 @@
                     <span class="releaseVersion">v2.1</span>
                     <span class="releaseDate">(13/06/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/c233272f20e14a4cb37d084744591ad5">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>API version bump</li>
@@ -152,7 +152,7 @@
                     <span class="releaseVersion">v2.0.1</span>
                     <span class="releaseDate">(09/06/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/c132b3146d5b479ba9f6d46043d0071e">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>Hotfix for new URLs</li>
@@ -165,7 +165,7 @@
                     <span class="releaseVersion">v2.0</span>
                     <span class="releaseDate">(08/06/2022)</span>
                     <a class="button right" href="https://www.icloud.com/shortcuts/70e4ab2ae07249a7bc52a346beae4a9c">
-                        <div class="innerbutton noanimation">Download</div>
+                        <div class="innerbutton noanimation lessimportant">Download</div>
                     </a>
                     <ul>
                         <li>Initial rewrite</li>
@@ -196,7 +196,7 @@
             <input id="urlinput" class="biggerfont textinput" type="text"><br>
 
             <a class="button biggerfont" onclick="list_qualities(event)">
-                <div id="ddlbutton" class="innerbutton expandOutElement">List qualities</div>
+                <div id="ddlbutton" class="innerbutton downloadbutton">List qualities</div>
             </a><br><br>
 
 
@@ -206,7 +206,7 @@
             </div>
             <div id="showmore" style="text-align: center; display: none;">
                 <a class='button biggerfont' onclick='show_more_results()'>
-                    <div class='innerbutton'>See more formats?</div>
+                    <div class='innerbutton downloadbutton'>See more formats?</div>
                 </a>
             </div>
             <div id="results_all"></div>
@@ -264,7 +264,7 @@
     html {
         background-color: #111;
         --tint-color: #CA3D02;
-        --tint-color-low: #a23100;
+        --tint-color-low: #b63700;
         --tint-color-fade: #6B2607;
         --semi-bold: 600;
         --tint-text-color: #FFF;
@@ -301,13 +301,6 @@
 </style>
 <style buttons>
     /* partially from unc0ver.dev */
-    .expandOutElement {
-        animation-fill-mode: forwards;
-        -webkit-animation-fill-mode: forwards;
-        -webkit-animation: expandOut 1.6s;
-        animation: expandOut 1.6s;
-    }
-
     .button {
         text-decoration: none;
         display: inline-block;
@@ -329,6 +322,9 @@
         -o-transition: padding .15s ease;
         -ms-transition: padding .15s ease;
     }
+    .lessimportant {
+        background-color: var(--tint-color-low);
+    }
 
     .disabled {
         background-color: var(--tint-color-fade);
@@ -339,7 +335,7 @@
     .innerbutton:hover {
         padding-left: 35px;
         padding-right: 35px;
-        filter: brightness(70%);
+        filter: brightness(80%);
         transition: 0.2s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
@@ -393,7 +389,7 @@
     }
 
     #results_best {
-        text-align: left;
+        /* text-align: left; */
         padding-left: 10px;
     }
 
@@ -472,9 +468,6 @@
             })
         }
 
-        static toggle_buttons(ids) {
-            ids.forEach(id => Utilities.toggle_button(id))
-        }
         static toggle_button(button_id) {
             const element = document.getElementById(button_id);
             element.classList.contains("disabled") ?
@@ -513,8 +506,11 @@
             return (await APIUtilities.fetch_url_header(api_url, requested_url)).json()
         }
 
-        static async download_video_id(requested_url, id) {
+        static async download_video_id(event, requested_url, id) {
+            if (Utilities.is_event_disabled(event)) { return; }
+
             Utilities.toggle_all_downloadbuttons();
+            Utilities.toggle_elements(["results_all", "loading"])
 
             const headers_dict = {
                 'Format-Extension': 'mkv',
@@ -527,6 +523,8 @@
                 .then(blob => {
                     const file = window.URL.createObjectURL(blob);
                     window.location.assign(file);
+                    Utilities.toggle_element("results_all", "inline-flex")
+                    Utilities.toggle_element("loading")
                     Utilities.toggle_all_downloadbuttons();
                 });
         }
@@ -583,8 +581,8 @@
             const id = api_response[result]["value"];
 
             results_best.innerHTML += `<div class='result'>
-                <a class='button' onclick='APIUtilities.download_video_id(\"${requested_url}\", \"${id}\")'>
-                    <div class='innerbutton downloadbutton noanimation'>Download ${result}</div>
+                <a class='button' onclick='APIUtilities.download_video_id(event, \"${requested_url}\", \"${id}\")'>
+                    <div class='innerbutton downloadbutton noanimation lessimportant'>Download ${result}</div>
                 </a>`;
         }
         Utilities.toggle_button("ddlbutton")
@@ -593,7 +591,6 @@
 
     async function show_more_results() {
         Utilities.toggle_elements(["showmore", "loading"]);
-        Utilities.toggle_button("ddlbutton")
         Utilities.toggle_all_downloadbuttons();
 
         const requested_url = document.getElementById("urlinput").value;
@@ -607,21 +604,16 @@
             const format = result.match("\\((.*)\\)")[1]
             const id = api_response[result]["value"]
             results_all.innerHTML += `<div class='result'>
-                <a class='button' onclick='APIUtilities.download_video_id(\"${requested_url}\", \"${id}\")'>
-                    <div class='innerbutton downloadbutton noanimation'>${resolution} ${format}</div>
+                <a class='button' onclick='APIUtilities.download_video_id(event, \"${requested_url}\", \"${id}\")'>
+                    <div class='innerbutton downloadbutton noanimation lessimportant'>${resolution} ${format}</div>
                 </a>`;
         }
 
         Utilities.toggle_element("loading");
-        Utilities.toggle_button("ddlbutton")
-
-
     }
 </script>
 
 </html>
-
-</div>
 
 <!-- 
     TODO:
