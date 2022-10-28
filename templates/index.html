@@ -197,7 +197,7 @@
 
             <a class="button biggerfont" onclick="list_qualities(event)">
                 <div id="ddlbutton" class="innerbutton expandOutElement">List qualities</div>
-            </a><br>
+            </a><br><br>
 
 
             <div id="results_best_wrapper">
@@ -339,6 +339,8 @@
     .innerbutton:hover {
         padding-left: 35px;
         padding-right: 35px;
+        filter: brightness(70%);
+        transition: 0.2s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .noanimation:hover {
@@ -392,6 +394,7 @@
 
     #results_best {
         text-align: left;
+        padding-left: 10px;
     }
 
     .textinput {
@@ -581,7 +584,7 @@
 
             results_best.innerHTML += `<div class='result'>
                 <a class='button' onclick='APIUtilities.download_video_id(\"${requested_url}\", \"${id}\")'>
-                    <div class='innerbutton downloadbutton'>Download ${result}</div>
+                    <div class='innerbutton downloadbutton noanimation'>Download ${result}</div>
                 </a>`;
         }
         Utilities.toggle_button("ddlbutton")
@@ -597,7 +600,7 @@
         const api_response = await APIUtilities.fetch_url_header_json(all_qualities_api, requested_url);
 
         Utilities.toggle_all_downloadbuttons();
-        
+
         for (result in api_response) {
             if (result == "Choose custom value") continue;
             const resolution = result.match("\\) (.*)")[1]
