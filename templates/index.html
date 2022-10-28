@@ -12,13 +12,12 @@
         <div class="centered downloadDiv">
             <h1>MediaGrabber</h1>
             <h1>A simple iOS shortcut to download videos from the internet</h1>
-            <a id="latestDownloadURL" class="button"
+            <a class="button biggerfont"
                 href="https://www.icloud.com/shortcuts/d6f0262d29dc43f9b647455113d43699">
                 <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
             </a>
 
-            <div id="legacyReleases">
-
+            <div id="legacyReleases" class="biggerfont">
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.1.3</span>
                     <span class="releaseDate">(03/09/2022)</span>
@@ -164,6 +163,10 @@
             <h1>Direct download</h1>
             <h3>Enter a link below to download it</h3>
 
+            <a class="button biggerfont"
+                onclick="print()">
+                <div id="latestButton" class="innerbutton expandOutElement">Download latest version</div>
+            </a>
 
         </div>
     </div>
@@ -259,9 +262,7 @@
         right: 0px;
     }
 
-    #latestDownloadURL,
-    #legacyReleases,
-    #apiEndpoints {
+    .biggerfont {
         font-size: 120%;
     }
 
@@ -307,87 +308,18 @@
         text-decoration: underline;
     }
 
-    /* endpoints */
-    #apiEndpoints {
-        overflow: auto;
-    }
-
     .bottom_buttons {
-        padding-top: 5px;
         border-radius: 10px;
         background-color: #1a1a1a;
         display: inline-flex;
+        margin-bottom: 20px;
     }
 
-</style>
-
-<style>
-    /* ENDPOINTS */
-    .method {
-        border-radius: 0px 5px 5px 0px;
-        padding: 5px !important;
-        padding-right: 10px !important;
-    }
-
-    .GET {
-        background-color: #031625;
-    }
-
-    .GET.method {
-        display: inline-block;
-        background-color: #0A487B;
-    }
-
-    .GET.endpoint {
-        border: solid 1px #0A487B;
-    }
-
-    .endpoint {
-        padding: 0px;
-        text-align: left;
-        cursor: pointer;
-    }
-
-    .endpointInfo {
-        padding: 0px;
-        padding-left: 5px;
-        text-align: left;
-        background-color: #031625;
-        border-radius: 0px 0px 5px 5px;
-        border: solid 1px #0A487B;
-        border-top: 0;
-        display: none;
-    }
-
-
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    td {
-        padding-right: 10px;
-        /* border-left: 1px solid #0A487B; */
-    }
-
-    .underline {
-        text-decoration: underline;
-    }
-
-    .middle {
-        text-align: center;
-    }
 </style>
 
 <script>
-    function toggle_api(name) {
-        const div = document.getElementById(name)
-        if (div.style.display === "block") {
-            div.style.display = "none";
-        } else {
-            div.style.display = "block";
-        }
+    function print() {
+        console.log("cc")
     }
 </script>
 

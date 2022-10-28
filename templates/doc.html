@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="centered">
+    <div class="centered biggerfont">
         <h1>
             <a href="/" style="left: 0px; position: absolute;">Go back</a>
             API documentation
@@ -189,7 +189,6 @@
 </body>
 
 <style>
-    .centered>*>*,
     .centered>*,
     .centered {
         height: auto;
@@ -199,59 +198,7 @@
         text-align: center;
     }
 
-    /* UNC0VER */
-    .expandOutElement {
-        animation-fill-mode: forwards;
-        -webkit-animation-fill-mode: forwards;
-        -webkit-animation: expandOut 1.6s;
-        animation: expandOut 1.6s;
-    }
-
-    .button {
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .innerbutton {
-        cursor: pointer;
-        color: var(--tint-text-color);
-        /* margin-top: 100px; */
-        border-radius: 100px;
-        padding: 15px 20px 15px 20px;
-        font-weight: var(--semi-bold);
-        background-color: var(--tint-color);
-        max-width: 150px;
-        transition: padding .15s ease;
-        -webkit-transition: padding .15s ease;
-        -moz-transition: padding .15s ease;
-        -o-transition: padding .15s ease;
-        -ms-transition: padding .15s ease;
-    }
-
-    .unavailable {
-        background-color: var(--tint-color-fade);
-        color: var(--tint-text-color-fade);
-        cursor: not-allowed;
-    }
-
-    .innerbutton:hover {
-        padding-left: 35px;
-        padding-right: 35px;
-    }
-
-    .noanimation:hover {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    .right {
-        position: absolute;
-        right: 0px;
-    }
-
-    #latestDownloadURL,
-    #legacyReleases,
-    #apiEndpoints {
+    .biggerfont {
         font-size: 120%;
     }
 
@@ -270,42 +217,6 @@
         --semi-bold: 600;
         --tint-text-color: #FFF;
         --tint-text-color-fade: #CCBBB3;
-    }
-
-
-    /* Old releases */
-    #legacyReleases {
-        border-radius: 5px;
-        display: block;
-        height: 55vh;
-        overflow: auto;
-        margin-top: 2vh;
-        margin-bottom: 2vh;
-    }
-
-    .releaseTableView {
-        padding-right: 120px;
-        text-align: left;
-    }
-
-    hr.solid {
-        border: 0;
-        border-top: 1px solid #303436;
-    }
-
-    .releaseVersion {
-        text-decoration: underline;
-    }
-
-    /* endpoints */
-    #apiEndpoints {
-        overflow: auto;
-    }
-
-    .bottom_buttons {
-        border-radius: 10px;
-        background-color: #1a1a1a;
-        display: inline-flex;
     }
 </style>
 
@@ -346,7 +257,6 @@
         border-top: 0;
         display: none;
     }
-
 
 
     table {
