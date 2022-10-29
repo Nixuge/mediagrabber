@@ -223,28 +223,30 @@
             <div id="loading" style="display: none;"></div>
         </div>
     </div>
+
+
+    <!-- Loading the JS last (not important anyways) -->
+    <script>
+        const info_api = '/api/{{ current_api_version }}/get_basic_info';
+        const all_qualities_api = '/api/{{ current_api_version }}/get_all_qualities';
+        const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
+        const download_api = '/api/{{ current_api_version }}/get_video';
+
+        const results_info = document.getElementById("results_info");
+        const results_best = document.getElementById("results_best");
+        const results_all = document.getElementById("results_all");
+
+        const showmore_button = document.getElementById("showmore");
+    </script>
+    <script src="/static/js/utilities.js"></script>
+    <script src="/static/js/apiutilities.js"></script>
+    <script src="/static/js/main.js"></script>
+
 </body>
-
-<script constants>
-    const info_api = '/api/{{ current_api_version }}/get_basic_info';
-    const all_qualities_api = '/api/{{ current_api_version }}/get_all_qualities';
-    const best_qualities_api = '/api/{{ current_api_version }}/get_best_qualities';
-    const download_api = '/api/{{ current_api_version }}/get_video';
-
-    const results_info = document.getElementById("results_info");
-    const results_best = document.getElementById("results_best");
-    const results_all = document.getElementById("results_all");
-
-    const showmore_button = document.getElementById("showmore");
-</script>
-<script src="/static/js/utilities.js"></script>
-<script src="/static/js/apiutilities.js"></script>
-<script src="/static/js/main.js"></script>
 
 </html>
 
 <!-- 
     TODO:
     -custom format input
-    -better buttons
  -->
