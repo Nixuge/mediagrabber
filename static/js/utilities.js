@@ -43,3 +43,4 @@ class Utilities {
         return event.target.classList.contains("disabled");
     }
 }
+Utilities.reset_results()

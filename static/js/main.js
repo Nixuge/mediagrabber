@@ -1,5 +1,3 @@
-Utilities.reset_results()
-
 async function list_qualities(event) {
     if (Utilities.is_event_disabled(event)) { return; }
 
