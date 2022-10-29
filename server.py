@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 import threading
 from typing import Optional
-from flask import Flask, request, send_file, render_template, redirect
+from flask import Flask, request, send_file, render_template, redirect, send_from_directory
 import yt_dlp as ytdl
 import time
 import os
@@ -77,7 +77,10 @@ class Global:
     @app.route("/api/get_api_version")
     def get_current_version():
         return CAV
-
+    
+    @app.route("/static/<path:path>")
+    def get_static_content(path):
+        return send_from_directory("static", path)
 
 @dataclass
 class Video:

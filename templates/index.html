@@ -4,13 +4,18 @@
 <head>
     <title>Mediagrabber - index</title>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/buttons.css">
+    <link rel="stylesheet" href="/static/css/ios.css">
+    <link rel="stylesheet" href="/static/css/directdl.css">
+    <link rel="stylesheet" href="/static/css/loading.css">
 </head>
 
 <body>
     <div class="split download">
         <div class="centered downloadDiv">
-            <h1>MediaGrabber</h1>
+            <h1 class="biggestfont">MediaGrabber</h1>
             <h1>A simple iOS shortcut to download videos from the internet</h1>
             <div id="all_buttons">
                 <div class="button_group">
@@ -54,7 +59,7 @@
                     <ul>
                         <li>Added online direct download version</li>
                         <li>Website restructuration</li>
-                        <li>Updated yt-dlp (2022.9.1 -> 2022.9.1)</li>
+                        <li>Updated yt-dlp (2022.9.1 -> 2022.10.4)</li>
                         <li>Breaking server changes<ul>
                                 <li>File cleaner delay (60s->240s)</li>
                                 <li>Cleaned up the code & added some logging where it was still missing</li>
@@ -190,15 +195,16 @@
 
     <div class="split directdl">
         <div class="centered directDiv">
-            <h1>Direct download</h1>
+            <h1 class="biggestfont">Direct download</h1>
             <h1>Enter a link below to download it</h1><br>
 
             <input id="urlinput" class="biggerfont textinput" type="text"><br>
 
             <a class="button biggerfont" onclick="list_qualities(event)">
                 <div id="ddlbutton" class="innerbutton downloadbutton">List qualities</div>
-            </a><br><br>
+            </a>
 
+            <br><br>
 
             <div id="results_best_wrapper">
                 <div id="results_info_outer">
@@ -218,248 +224,6 @@
         </div>
     </div>
 </body>
-
-<style global>
-    @media only screen and (min-width: 1000px) {
-        .split {
-            height: 100%;
-            width: 50%;
-            position: fixed;
-            z-index: 1;
-            top: 10;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-
-        .download {
-            left: 0;
-        }
-
-        .directdl {
-            right: 0;
-        }
-    }
-
-    @media only screen and (max-width: 1000px) {
-        .directdl {
-            padding-top: 100px;
-        }
-    }
-
-    .button_group,
-    .releaseTableView,
-    .innerbutton,
-    .centered>*,
-    .centered {
-        height: auto;
-        margin: 0 auto;
-        padding: 10px;
-        position: relative;
-        text-align: center;
-    }
-
-    * {
-        font-family: -apple-system-font, BlinkMacSystemFont, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
-        color: var(--tint-text-color);
-        margin: 0;
-        /* would be better in a body tag tbh */
-    }
-
-    html {
-        background-color: #111;
-        --tint-color: #CA3D02;
-        --tint-color-low: #b63700;
-        --tint-color-fade: #6B2607;
-        --semi-bold: 600;
-        --tint-text-color: #FFF;
-        --tint-text-color-fade: #CCBBB3;
-    }
-
-    img {
-        max-width: 100%;
-    }
-
-    .right {
-        position: absolute;
-        right: 0px;
-    }
-
-    .left {
-        position: absolute;
-        left: 0px;
-    }
-
-    .biggerfont {
-        font-size: 120%;
-    }
-
-    .biggestfont {
-        font-size: 250%;
-    }
-
-    hr.solid {
-        border: 0;
-        border-top: 1px solid #303436;
-        margin-top: 10px;
-    }
-</style>
-<style buttons>
-    /* partially from unc0ver.dev */
-    .button {
-        text-decoration: none;
-        display: inline-block;
-        padding: 5px;
-    }
-
-    .innerbutton {
-        cursor: pointer;
-        color: var(--tint-text-color);
-        /* margin-top: 100px; */
-        border-radius: 100px;
-        padding: 15px 20px 15px 20px;
-        font-weight: var(--semi-bold);
-        background-color: var(--tint-color);
-        max-width: 250px;
-        transition: padding .15s ease;
-        -webkit-transition: padding .15s ease;
-        -moz-transition: padding .15s ease;
-        -o-transition: padding .15s ease;
-        -ms-transition: padding .15s ease;
-    }
-
-    .lessimportant {
-        background-color: var(--tint-color-low);
-    }
-
-    .disabled {
-        background-color: var(--tint-color-fade);
-        color: var(--tint-text-color-fade);
-        cursor: not-allowed;
-    }
-
-    .innerbutton:hover {
-        padding-left: 35px;
-        padding-right: 35px;
-        filter: brightness(80%);
-        transition: 0.2s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    .noanimation:hover {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-</style>
-<style ios>
-    /* Old releases */
-    #legacyReleases {
-        border-radius: 5px;
-        display: block;
-        height: 55vh;
-        overflow: auto;
-        margin-top: 2vh;
-        margin-bottom: 2vh;
-        border: 3px solid var(--tint-color);
-    }
-
-    .releaseTableView {
-        padding-right: 120px;
-        text-align: left;
-    }
-
-    .releaseVersion {
-        text-decoration: underline;
-    }
-
-    #all_buttons {
-        background-color: #1a1a1a;
-        width: 95%;
-        border-radius: 20px;
-    }
-
-    .button_group {
-        display: inline-flex;
-    }
-</style>
-<style directdl>
-    #results_best_wrapper {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-
-    #results_info {
-        transform: translateY(-50%);
-        top: 50%;
-        position: relative;
-        background-color: #1a1a1a;
-        border-radius: 15px;
-    }
-
-    #results_info>* {
-        border-radius: 15px;
-    }
-
-
-    #results_best {
-        background-color: #1a1a1a;
-        padding: 10px;
-        width: fit-content;
-        display: inline-block;
-        /* Center vertically */
-        border-radius: 15px;
-        transform: translateY(-50%);
-        top: 50%;
-        position: relative;
-        margin-left: 20px;
-    }
-
-    .textinput {
-        /* could be in global but only used in ddl part */
-        width: 90%;
-        background: #111;
-        color: #FFF;
-        border: 3px solid var(--tint-color);
-        border-radius: 10px;
-    }
-
-    #results_all {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        background-color: #1a1a1a;
-        border-radius: 15px;
-    }
-</style>
-<style loading>
-    /* from https://loading.io/css */
-    @keyframes lds-dual-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    #loading {
-        display: inline-block;
-        width: 80px;
-        height: 80px;
-    }
-
-    #loading:after {
-        content: " ";
-        display: block;
-        width: 64px;
-        height: 64px;
-        margin: 8px;
-        border-radius: 50%;
-        border: 6px solid;
-        border-color: #FFF transparent #FFF transparent;
-        animation: lds-dual-ring 1.2s linear infinite;
-    }
-</style>
-
 
 <script constants>
     const info_api = '/api/{{ current_api_version }}/get_basic_info';

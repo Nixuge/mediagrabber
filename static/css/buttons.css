@@ -1,0 +1,44 @@
+/* partially from unc0ver.dev */
+.button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+}
+
+.innerbutton {
+    cursor: pointer;
+    color: var(--tint-text-color);
+    /* margin-top: 100px; */
+    border-radius: 100px;
+    padding: 15px 20px 15px 20px;
+    font-weight: var(--semi-bold);
+    background-color: var(--tint-color);
+    max-width: 250px;
+    transition: padding .15s ease;
+    -webkit-transition: padding .15s ease;
+    -moz-transition: padding .15s ease;
+    -o-transition: padding .15s ease;
+    -ms-transition: padding .15s ease;
+}
+
+.lessimportant {
+    background-color: var(--tint-color-low);
+}
+
+.disabled {
+    background-color: var(--tint-color-fade);
+    color: var(--tint-text-color-fade);
+    cursor: not-allowed;
+}
+
+.innerbutton:hover {
+    padding-left: 35px;
+    padding-right: 35px;
+    filter: brightness(80%);
+    transition: 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.noanimation:hover {
+    padding-left: 20px;
+    padding-right: 20px;
+}

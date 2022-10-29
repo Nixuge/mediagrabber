@@ -1,0 +1,47 @@
+#results_best_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#results_info {
+    transform: translateY(-50%);
+    top: 50%;
+    position: relative;
+    background-color: #1a1a1a;
+    border-radius: 15px;
+}
+
+#results_info>* {
+    border-radius: 15px;
+}
+
+
+#results_best {
+    background-color: #1a1a1a;
+    padding: 10px;
+    width: fit-content;
+    display: inline-block;
+    /* Center vertically */
+    border-radius: 15px;
+    transform: translateY(-50%);
+    top: 50%;
+    position: relative;
+    margin-left: 20px;
+}
+
+.textinput {
+    /* could be in global but only used in ddl part */
+    width: 90%;
+    background: #111;
+    color: #FFF;
+    border: 3px solid var(--tint-color);
+    border-radius: 10px;
+}
+
+#results_all {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #1a1a1a;
+    border-radius: 15px;
+}

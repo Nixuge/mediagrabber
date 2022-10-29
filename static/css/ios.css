@@ -1,0 +1,29 @@
+/* Old releases */
+#legacyReleases {
+    border-radius: 5px;
+    display: block;
+    height: 55vh;
+    overflow: auto;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    border: 3px solid var(--tint-color);
+}
+
+.releaseTableView {
+    padding-right: 120px;
+    text-align: left;
+}
+
+.releaseVersion {
+    text-decoration: underline;
+}
+
+#all_buttons {
+    background-color: #1a1a1a;
+    width: 95%;
+    border-radius: 20px;
+}
+
+.button_group {
+    display: inline-flex;
+}
