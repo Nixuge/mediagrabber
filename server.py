@@ -148,7 +148,11 @@ class Youtube:
         logging.debug("Getting basic info for URL")
         meta: dict
         with ytdl.YoutubeDL({"quiet": True}) as ydl:
-            meta = ydl.extract_info(URL, download=False)
+            try:
+                meta = ydl.extract_info(URL, download=False)
+            except Exception as e:
+                return f"Exception happened! {e}", 400
+
         
         friendly_dict = {}
         for key in ["thumbnail", "title", "uploader", "extractor_key"]:

@@ -201,7 +201,9 @@
 
 
             <div id="results_best_wrapper">
-                <div id="results_info"></div>
+                <div id="results_info_outer">
+                    <div id="results_info"></div>
+                </div>
                 <div id="results_best_outer">
                     <div id="results_best"></div>
                 </div>
@@ -384,10 +386,15 @@
         grid-template-columns: 1fr 1fr;
     }
 
-    #results_info>*,
     #results_info {
-        border-radius: 15px;
+        transform: translateY(-50%);
+        top: 50%;
+        position: relative;
         background-color: #1a1a1a;
+        border-radius: 15px;
+    }
+
+    #results_info>* {
         border-radius: 15px;
     }
 
@@ -397,7 +404,12 @@
         padding: 10px;
         width: fit-content;
         display: inline-block;
+        /* Center vertically */
         border-radius: 15px;
+        transform: translateY(-50%);
+        top: 50%;
+        position: relative;
+        margin-left: 20px;
     }
 
     .textinput {
@@ -458,6 +470,8 @@
     const results_info = document.getElementById("results_info");
     const results_best = document.getElementById("results_best");
     const results_all = document.getElementById("results_all");
+
+    const showmore_button = document.getElementById("showmore");
 </script>
 <script utilities>
     class Utilities {
@@ -470,6 +484,7 @@
             results_all.style.display = "none";
             results_info.style.display = "none";
             results_best.style.display = "none";
+            showmore_button.style.display = "none";
         }
 
         static toggle_all_downloadbuttons() {
@@ -558,14 +573,19 @@
         const requested_url = document.getElementById("urlinput").value;
         const api_response = await APIUtilities.fetch_url_header(info_api, requested_url);
 
+        console.log(api_response.ok);
+
         // Big dirty block because yes
         if (!api_response.ok) {
             results_best.innerHTML = "Invalid link.";
             results_best.className = "biggestfont";
             results_best.style.color = "#e70606";
             results_best.style.textAlign = "center";
+            results_best.style.width = "100%";
+            results_best.style.marginLeft = "50%";
+            results_best.style.transform = "translateX(-95%)";
             Utilities.toggle_button("ddlbutton")
-            Utilities.toggle_element("loading");
+            Utilities.toggle_elements(["loading", "results_best"]);
             return;
         }
 
