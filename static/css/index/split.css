@@ -1,0 +1,45 @@
+@media only screen and (min-width: 1000px) {
+    .split {
+        height: 100%;
+        width: 50%;
+        position: fixed;
+        z-index: 1;
+        top: 10;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    .download {
+        left: 0;
+    }
+
+    .directdl {
+        right: 0;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .directdl {
+        padding-top: 100px;
+    }
+}
+
+.right {
+    position: absolute;
+    right: 0px;
+}
+
+.left {
+    position: absolute;
+    left: 0px;
+}
+
+.button_group,
+.releaseTableView,
+.innerbutton {
+    height: auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+}

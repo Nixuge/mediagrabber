@@ -4,8 +4,10 @@
 <head>
     <title>Mediagrabber - index</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/css/scrollbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/scrollbar.css">
+    <link rel="stylesheet" href="/static/css/doc/endpoints.css">
 </head>
 
 <body>
@@ -223,107 +225,17 @@
             </div>
         </div>
     </div>
-</body>
 
-<style>
-    .centered>*,
-    .centered {
-        height: auto;
-        margin: 0 auto;
-        padding: 10px;
-        position: relative;
-        text-align: center;
-    }
-
-    .biggerfont {
-        font-size: 120%;
-    }
-
-    * {
-        font-family: -apple-system-font, BlinkMacSystemFont, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
-        color: var(--tint-text-color);
-        margin: 0;
-        /* would be better in a body tag tbh */
-    }
-
-    html {
-        background-color: #111;
-        --tint-color: #CA3D02;
-        --tint-color-low: #a23100;
-        --tint-color-fade: #6B2607;
-        --semi-bold: 600;
-        --tint-text-color: #FFF;
-        --tint-text-color-fade: #CCBBB3;
-    }
-</style>
-
-<style>
-    /* ENDPOINTS */
-    .method {
-        border-radius: 0px 5px 5px 0px;
-        padding: 5px !important;
-        padding-right: 10px !important;
-    }
-
-    .GET {
-        background-color: #031625;
-    }
-
-    .GET.method {
-        display: inline-block;
-        background-color: #0A487B;
-    }
-
-    .GET.endpoint {
-        border: solid 1px #0A487B;
-    }
-
-    .endpoint {
-        padding: 0px;
-        text-align: left;
-        cursor: pointer;
-    }
-
-    .endpointInfo {
-        padding: 0px;
-        padding-left: 5px;
-        text-align: left;
-        background-color: #031625;
-        border-radius: 0px 0px 5px 5px;
-        border: solid 1px #0A487B;
-        border-top: 0;
-        display: none;
-    }
-
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    td {
-        padding-right: 10px;
-        /* border-left: 1px solid #0A487B; */
-    }
-
-    .underline {
-        text-decoration: underline;
-    }
-
-    .middle {
-        text-align: center;
-    }
-</style>
-
-<script>
-    function toggle_api(name) {
-        const div = document.getElementById(name)
-        if (div.style.display === "block") {
-            div.style.display = "none";
-        } else {
-            div.style.display = "block";
+    <script>
+        function toggle_api(name) {
+            const div = document.getElementById(name)
+            if (div.style.display === "block") {
+                div.style.display = "none";
+            } else {
+                div.style.display = "block";
+            }
         }
-    }
-</script>
+    </script>
+</body>
 
 </html>

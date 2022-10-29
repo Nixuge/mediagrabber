@@ -52,6 +52,10 @@ class Utils:
 
         IS_GENERIC = not HAS_AUDIO_FORMAT and not HAS_VIDEO_FORMAT
         return HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC
+    
+    @staticmethod
+    def is_valid_link(link) -> bool:
+        return True
 
 
 class Website:
@@ -75,14 +79,19 @@ class Website:
     @app.route("/doc.html")
     @app.route("/documentation")
     @app.route("/documentation.html")
-    def download():
+    def doc():
         return render_template("doc.html")
+
+    @app.route("/supported")
+    @app.route("/supported.html")
+    def supported():
+        return render_template("supported.html")
 
 
 class Global:
     @app.after_request
     def add_header(response: wrappers.Response):
-        # only cache static files (js/css/html)
+        # only cache static files (js/css)
         # otherwise chrome doesn't like it.
         # max-age = 1 day (60*60*24)
         ct = response.content_type
