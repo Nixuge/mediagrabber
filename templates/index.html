@@ -36,8 +36,8 @@
                     <a class="button" href="https://nixuge.me">
                         <div class="innerbutton lessimportant">Main website</div>
                     </a>
-
                 </div>
+                <div id="fixdiv"></div>
                 <div class="button_group">
                     <a class="button" href="https://github.com/nixuge/mediagrabber">
                         <div class="innerbutton lessimportant">Server source</div>
@@ -237,17 +237,40 @@
     const results_all = document.getElementById("results_all");
 
     const showmore_button = document.getElementById("showmore");
-
-    // setTimeout(function(){ ; }, 50)
 </script>
 <script src="/static/js/utilities.js"></script>
 <script src="/static/js/apiutilities.js"></script>
 <script src="/static/js/main.js"></script>
+
+<script>
+    // Quite dirty script to fix the buttons doing 
+    // weird things when hovering on them when there's not enough
+    // space to display it fully
+    const b_group = document.getElementsByClassName('button_group');
+    const b_all = document.getElementById("all_buttons");
+    const fixdiv = document.getElementById("fixdiv");
+
+    function on_resize() {
+        const width_all = document.getElementById("all_buttons").clientWidth;
+
+        //+30 for the padding (+15 on both sides)
+        let width_buttons = 30 + b_group[1].clientWidth + b_group[2].clientWidth;
+
+        width_all > width_buttons ?
+            fixdiv.style.display = "none" :
+            fixdiv.style.display = "block";
+    }
+
+    on_resize(); //call on page load
+    addEventListener('resize', (event) => on_resize());
+</script>
 
 </html>
 
 <!-- 
     TODO:
     -custom format input
-    -better buttons
+    -more family friendly input
+    -better checking for links before just sending everything (IMPORTANT!!!!)
+    -fix rectangle appearing when downloading smth without show more clicked (LOW PRIORITY)
  -->
