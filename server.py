@@ -82,11 +82,11 @@ class Website:
 class Global:
     @app.after_request
     def add_header(response: wrappers.Response):
-        # cache requests except if video/audio
+        # only cache static files (js/css/html)
         # otherwise chrome doesn't like it.
         # max-age = 1 day (60*60*24)
         ct = response.content_type
-        if not "video" in ct and not "audio" in ct:
+        if "javascript" in ct or "css" in ct or "html" in ct:
             response.headers['Cache-Control'] = 'public, max-age=86400'
 
         return response
