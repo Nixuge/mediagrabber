@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 import threading
 from typing import Optional
-from flask import Flask, request, send_file, render_template, redirect, send_from_directory
+from flask import Flask, request, send_file, render_template, redirect, send_from_directory, wrappers
 import yt_dlp as ytdl
 import time
 import os
@@ -81,10 +81,15 @@ class Website:
 
 class Global:
     @app.after_request
-    def add_header(response):
-        response.headers['Cache-Control'] = 'public'
+    def add_header(response: wrappers.Response):
+        # cache requests except if video/audio
+        # otherwise chrome doesn't like it.
+        ct = response.content_type
+        if not "video" in ct and not "audio" in ct:
+            response.headers['Cache-Control'] = 'public'
+
         return response
-    
+
     @app.route("/api/get_current_version")
     @app.route("/api/get_api_version")
     def get_current_version():
