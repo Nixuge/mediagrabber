@@ -180,62 +180,6 @@
             </div>
         </div>
 
-        <div id="get_video_endpoint">
-            <div class="endpoint GET" onclick="toggle_api('endpointInfo_get_video_endpoint')">
-                <span class="method GET">GET</span>
-                <span>/api/v2.1/get_video</span>
-            </div>
-            <div id="endpointInfo_get_video_endpoint" class="endpointInfo">
-                <table>
-                    <h3 class="underline">Headers</h3>
-                    <tr>
-                        <td class="underline">Name</td>
-                        <td class="underline">Needed</td>
-                        <td class="underline">Format</td>
-                        <td class="underline">Note</td>
-                    </tr>
-                    <tr>
-                        <td>Id</td>
-                        <td>False</td>
-                        <td>str</td>
-                        <td>Format ID for yt-dlp. Best from yt-dlp if none provided.</td>
-                    </tr>
-                    <tr>
-                        <td>Requested-Url</td>
-                        <td>True</td>
-                        <td>str</td>
-                        <td>URL to download.</td>
-                    </tr>
-                    <tr>
-                        <td>format_extension</td>
-                        <td>False</td>
-                        <td>str</td>
-                        <td>Extension of the final file. mov if none provided.</td>
-                    </tr>
-                    <tr>
-                        <td>dont_retry_as_mkv</td>
-                        <td>False</td>
-                        <td>any</td>
-                        <td>Avoid retrying with mkv as the merge format if something fails.</td>
-                    </tr>
-                </table>
-                <br>
-                <h3 class="underline">Result</h3>
-                <span>The endpoint should return the video file you requested.</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function toggle_api(name) {
-            const div = document.getElementById(name)
-            if (div.style.display === "block") {
-                div.style.display = "none";
-            } else {
-                div.style.display = "block";
-            }
-        }
-    </script>
 </body>
 
 </html>

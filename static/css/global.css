@@ -24,6 +24,9 @@
 
 html {
     background-color: #111;
+    --tint-color-h: 18;
+    --tint-color-s: 98%;
+    --tint-color-l: 40%;
     --tint-color: #CA3D02;
     --tint-color-low: #a23100;
     --tint-color-fade: #6B2607;
