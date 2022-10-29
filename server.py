@@ -86,7 +86,7 @@ class Global:
         # otherwise chrome doesn't like it.
         # max-age = 1 day (60*60*24)
         ct = response.content_type
-        if "javascript" in ct or "css" in ct or "html" in ct:
+        if "javascript" in ct or "css" in ct:
             response.headers['Cache-Control'] = 'public, max-age=86400'
 
         return response
