@@ -84,9 +84,10 @@ class Global:
     def add_header(response: wrappers.Response):
         # cache requests except if video/audio
         # otherwise chrome doesn't like it.
+        # max-age = 1 day (60*60*24)
         ct = response.content_type
         if not "video" in ct and not "audio" in ct:
-            response.headers['Cache-Control'] = 'public'
+            response.headers['Cache-Control'] = 'public, max-age=86400'
 
         return response
 
