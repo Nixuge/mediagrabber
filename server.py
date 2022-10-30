@@ -31,6 +31,12 @@ ytdl_logger = logging.getLogger("ytdl-ignore")
 ytdl_logger.disabled = True
 
 
+class ErrorMessages:
+    GENERIC = "An exception happened."
+    NO_URL = "Please add an URL to your request. Refeer to <a href=\"/documentation\">this page</a> for more info about the endpoints."
+    INVALID_URL = "Invalid URL. Refeer to <a href=\"/supported\">this page</a> for a list of supported websites."
+
+
 class Utils:
     @staticmethod
     def keep2DigitsAfterPeriod(i) -> str:
@@ -52,9 +58,12 @@ class Utils:
 
         IS_GENERIC = not HAS_AUDIO_FORMAT and not HAS_VIDEO_FORMAT
         return HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC
-    
+
     @staticmethod
-    def is_valid_link(link) -> bool:
+    def is_valid_link(link: str) -> bool:
+        # youtube
+        youtube = "^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
+
         return True
 
 
@@ -177,18 +186,19 @@ class Youtube:
     @app.route(f"/api/{CAV}/get_basic_info")
     def get_basic_info():
         headers_data = request.headers
-        URL = headers_data.get("Requested-Url")
-        if not URL:
+        url = headers_data.get("Requested-Url")
+        if not url:
             logging.error("Needs an URL")
-            return "Please add an URL to your request.", 400
+            return ErrorMessages.NO_URL, 400
+
 
         logging.debug("Getting basic info for URL")
         meta: dict
         with ytdl.YoutubeDL({"quiet": True}) as ydl:
             try:
-                meta = ydl.extract_info(URL, download=False)
+                meta = ydl.extract_info(url, download=False)
             except Exception as e:
-                return f"Exception happened! {e}", 400
+                return f"{ErrorMessages.GENERIC} {e}", 400
 
         friendly_dict = {}
         for key in ["thumbnail", "title", "uploader", "extractor_key"]:
@@ -209,15 +219,18 @@ class Youtube:
         URL = headers_data.get("Requested-Url")
         if not URL:
             logging.error("Needs an URL")
-            return "Please add an URL to your request.", 400
-
+            return ErrorMessages.NO_URL, 400
+        if not Utils.is_valid_link(url):
+            logging.error(f"Invalid URL: {url}")
+            return ErrorMessages.INVALID_URL, 400
+        
         logging.debug(f"Getting best qualities for URL {URL}")
 
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
             try:
                 meta = ydl.extract_info(URL, download=False)
             except Exception as e:
-                return f"Exception happened! {e}", 400
+                return f"{ErrorMessages.GENERIC} {e}", 400
 
             formats = meta.get('formats', [meta])
 
@@ -261,18 +274,21 @@ class Youtube:
     @app.route(f"/api/{CAV}/get_all_qualities")
     def get_all_qualities():
         headers_data = request.headers
-        URL = headers_data.get("Requested-Url")
-        if not URL:
+        url = headers_data.get("Requested-Url")
+        if not url:
             logging.error("Needs an URL")
-            return "Please add an URL yo your request.", 400
-
-        logging.debug(f"Getting all qualities for URL {URL}")
+            return ErrorMessages.NO_URL, 400
+        if not Utils.is_valid_link(url):
+            logging.error(f"Invalid URL: {url}")
+            return ErrorMessages.INVALID_URL, 400
+        
+        logging.debug(f"Getting all qualities for URL {url}")
 
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
             try:
-                meta = ydl.extract_info(URL, download=False)
+                meta = ydl.extract_info(url, download=False)
             except Exception as e:
-                return f"Exception happened! {e}", 400
+                return f"{ErrorMessages.GENERIC} {e}", 400
             formats = meta.get('formats', [meta])
 
         final_formats = {}
@@ -346,7 +362,10 @@ class Youtube:
         url = data.get("Requested-Url")
         if not url:
             logging.error("Needs an URL")
-            return "Please add an url to your request headers.", 400
+            return ErrorMessages.NO_URL, 400
+        if not Utils.is_valid_link(url):
+            logging.error(f"Invalid URL: {url}")
+            return ErrorMessages.INVALID_URL, 400
 
         format_extension = data.get("Format-Extension")
         if not format_extension:
