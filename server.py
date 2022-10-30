@@ -1,6 +1,5 @@
 #!/usr/local/bin/python3
 
-from asyncio.log import logger
 from dataclasses import dataclass
 import threading
 from typing import Optional
@@ -9,120 +8,24 @@ import yt_dlp as ytdl
 import time
 import os
 import logging
-import re
 from datetime import timedelta
-from urllib.parse import urlparse
 
-app = Flask(__name__)
+from utils.logger import set_logger_levels
+from utils.error_messages import ErrorMessages
+from utils.matcher import get_valid_link
+from utils.global_utils import GlobalUtils
+
+# settings vars
+template_dir = os.path.abspath('web_files/html')
+static_url_dir = os.path.abspath('web_files/static')
+app = Flask(__name__, template_folder=template_dir,
+            static_folder=static_url_dir)
 CAV = f"v2.2"  # Current API version
 
-# LOGGING (for some reason logging.getLogger(__name__) doesn't work...)
-logging.addLevelName(logging.DEBUG, "\033[1;36m%s\033[1;0m" % logging.getLevelName(
-    logging.DEBUG))  # 37 = gray but blue good
-logging.addLevelName(
-    logging.INFO, "\033[1;36m%s\033[1;0m" % logging.getLevelName(logging.INFO))
-logging.addLevelName(
-    logging.WARNING, "\033[1;33m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName(
-    logging.ERROR, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
-
-logger_format = "[%(levelname)s|%(filename)s:%(lineno)s@%(funcName)s] %(message)s"
-logging.basicConfig(format=logger_format, level=logging.DEBUG)
-
-# avoid yt-dlp output
+# logger
+set_logger_levels()
 ytdl_logger = logging.getLogger("ytdl-ignore")
 ytdl_logger.disabled = True
-
-
-class ErrorMessages:
-    GENERIC = "An exception happened."
-    NO_URL = "Please add an URL to your request. Refeer to <a href=\"/documentation\">this page</a> for more info about the endpoints."
-    INVALID_URL = "Invalid URL. Refeer to <a href=\"/supported\">this page</a> for a list of supported websites."
-
-
-class Matcher:
-    domain_table = {
-        "reddit": ["redd.it", "reddit.com", "reddit.fr"],
-        "twitter": ["twitter.com", "twttr.com", "t.co", "twimg.com", "twitpic.com", "twitter.co", "twitter.fr"],
-        "instagram": ["instagram.com", "instagram.fr"],
-        "snapchat": ["snapchat.com"],
-        "facebook": ["acebook.com","faacebook.com","facebbook.com","facebook.co","facebook.com","facebook.com.au","facebook.com.mx","facebook.it","facebook.net","fb.audio","fb.com","fb.gg","fb.me","fb.watch","fbcdn.net","internet.org"],
-    }
-
-    def __init__(self, to_match):
-        parsed_url = urlparse(to_match)
-        self.link = to_match
-        self.hostname = parsed_url.netloc
-        self.domain = '.'.join(self.hostname.split('.')[-2:])
-        self.custom_matchers = [
-            self._custom_match_youtube,
-        ]
-
-    def get_result_link(self) -> bool | str:
-        for custom_matcher in self.custom_matchers:
-            result = custom_matcher()
-            if result: return result
-
-        for website, domains in self.domain_table:
-            if self.domain in domains:
-                logger.debug(f"Matched {website} for URL {self.link}")
-                return self.link
-
-        return False
-
-    def _custom_match_youtube(self):
-        # https://stackoverflow.com/a/37704433
-        regex = "^((?:https?:)?\/\/)?((?:music|www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
-
-        match = re.fullmatch(regex, self.link)
-        if not match: 
-            return False
-
-        full = ""
-        for group in match.groups():
-            if not group or group[:5] in ["&list", "?list"]: continue
-            full += group
-        
-        logger.debug(f"Custom matched Youtube for URL {full} (from {self.link})")
-        return full
-    
-    
-    def _match_ph(self):
-        #TODO
-        return self.link
-    
-    def _match_odysee(self):
-        #TODO
-        return self.link
-
-
-class Utils:
-    @staticmethod
-    def keep2DigitsAfterPeriod(i) -> str:
-        i = str(i)
-        split = i.split(".")
-        return split[0] + "." + split[1][:2]
-
-    @staticmethod
-    def getFormats(formats):
-        HAS_AUDIO_FORMAT = False
-        HAS_VIDEO_FORMAT = False
-        for f in formats:
-            resolution = f.get("resolution")
-            if resolution != None:
-                if resolution == "audio only":
-                    HAS_AUDIO_FORMAT = True
-                if "x" in resolution:
-                    HAS_VIDEO_FORMAT = True
-
-        IS_GENERIC = not HAS_AUDIO_FORMAT and not HAS_VIDEO_FORMAT
-        return HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC
-
-    @staticmethod
-    def get_valid_link(link: str) -> bool | str:
-        # long function to determine if a link is valid
-        # prefer to take out a bit of perfs at the cost of avoiding as much exploits as I can
-        return Matcher(link).get_result_link()
 
 
 class Website:
@@ -134,7 +37,7 @@ class Website:
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def catch_all(path):
-        return redirect("https://mediagrabber.nixuge.me", code=302)
+        return redirect("/", code=302)
 
     @app.route("/index")
     @app.route("/index.html")
@@ -174,6 +77,8 @@ class Global:
 
     @app.route("/static/<path:path>")
     def get_static_content(path):
+        print(path)
+
         return send_from_directory("static", path)
 
 
@@ -248,8 +153,8 @@ class Youtube:
         if not url:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
-        
-        url = Utils.get_valid_link(url)
+
+        url = get_valid_link(url)
         if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
@@ -282,8 +187,8 @@ class Youtube:
         if not url:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
-        
-        url = Utils.get_valid_link(url)
+
+        url = get_valid_link(url)
         if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
@@ -299,8 +204,9 @@ class Youtube:
             formats = meta.get('formats', [meta])
 
         # get info about the media
-        HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC = Utils.getFormats(
-            formats)
+        HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC = \
+            GlobalUtils.getFormats(formats)
+
         logging.debug(
             f"Has audio: {HAS_AUDIO_FORMAT} | Has video: {HAS_VIDEO_FORMAT}")
 
@@ -343,7 +249,7 @@ class Youtube:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
 
-        url = Utils.get_valid_link(url)
+        url = get_valid_link(url)
         if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
@@ -430,7 +336,7 @@ class Youtube:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
 
-        url = Utils.get_valid_link(url)
+        url = get_valid_link(url)
         if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
