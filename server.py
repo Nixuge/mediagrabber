@@ -4,14 +4,17 @@ from dataclasses import dataclass
 import threading
 from typing import Optional
 from flask import Flask, request, send_file, render_template, redirect, send_from_directory, wrappers
+from numpy import mat
 import yt_dlp as ytdl
 import time
 import os
 import logging
+import re
 from datetime import timedelta
+
+
 app = Flask(__name__)
 CAV = f"v2.2"  # Current API version
-CURRENT_SCRIPT_VERSION = "2.2"
 
 # LOGGING (for some reason logging.getLogger(__name__) doesn't work...)
 logging.addLevelName(logging.DEBUG, "\033[1;36m%s\033[1;0m" % logging.getLevelName(
@@ -37,6 +40,58 @@ class ErrorMessages:
     INVALID_URL = "Invalid URL. Refeer to <a href=\"/supported\">this page</a> for a list of supported websites."
 
 
+class Regexes:
+    # https://stackoverflow.com/a/37704433
+    YOUTUBE = "^((?:https?:)?\/\/)?((?:music|www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
+
+
+class Matcher:
+    def __init__(self, to_match):
+        self.to_match = to_match
+
+    def get_result_link(self) -> bool | str:
+        internal_matchers = [
+            self._match_youtube
+        ]
+
+        for internal_matcher in internal_matchers:
+            result = internal_matcher()
+            if result: return result
+
+    def _match_youtube(self):
+        full = ""
+        match = re.fullmatch(Regexes.YOUTUBE, self.to_match)
+        if not match: 
+            return False
+
+        for group in match.groups():
+            if not group or group[:5] in ["&list", "?list"]: continue
+            full += group
+
+        return full
+    
+    def _match_reddit(self):
+        return self.to_match
+    
+    def _match_twitter(self):
+        return self.to_match
+    
+    def _match_instagram(self):
+        return self.to_match
+    
+    def _match_ph(self):
+        return self.to_match
+    
+    def _match_snap(self):
+        return self.to_match
+    
+    def _match_odysee(self):
+        return False
+    
+    def _match_facebook(self):
+        return self.to_match
+
+
 class Utils:
     @staticmethod
     def keep2DigitsAfterPeriod(i) -> str:
@@ -60,11 +115,15 @@ class Utils:
         return HAS_AUDIO_FORMAT, HAS_VIDEO_FORMAT, IS_GENERIC
 
     @staticmethod
-    def is_valid_link(link: str) -> bool:
-        # youtube
-        youtube = "^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
+    def get_valid_link(link: str) -> bool | str:
+        # long function to determine if a link is valid
+        # prefer to take out a bit of perfs at the cost of avoiding as much exploits as I can
+        matcher = Matcher(link)
 
-        return True
+        result = matcher.get_result_link()
+        print(result)
+
+        return result
 
 
 class Website:
@@ -190,7 +249,11 @@ class Youtube:
         if not url:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
-
+        
+        url = Utils.get_valid_link(url)
+        if not url:
+            logging.error(f"Invalid URL: {url}")
+            return ErrorMessages.INVALID_URL, 400
 
         logging.debug("Getting basic info for URL")
         meta: dict
@@ -216,19 +279,21 @@ class Youtube:
         headers_data = request.headers
         # FORMAT_TYPE = str(headers_data.get("format_type"))
         # could implement, but this is mostly for ios tbh
-        URL = headers_data.get("Requested-Url")
-        if not URL:
+        url = headers_data.get("Requested-Url")
+        if not url:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
-        if not Utils.is_valid_link(url):
+        
+        url = Utils.get_valid_link(url)
+        if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
-        
-        logging.debug(f"Getting best qualities for URL {URL}")
+
+        logging.debug(f"Getting best qualities for URL {url}")
 
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
             try:
-                meta = ydl.extract_info(URL, download=False)
+                meta = ydl.extract_info(url, download=False)
             except Exception as e:
                 return f"{ErrorMessages.GENERIC} {e}", 400
 
@@ -278,10 +343,12 @@ class Youtube:
         if not url:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
-        if not Utils.is_valid_link(url):
+
+        url = Utils.get_valid_link(url)
+        if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
-        
+
         logging.debug(f"Getting all qualities for URL {url}")
 
         with ytdl.YoutubeDL({"quiet": True, "logger": ytdl_logger}) as ydl:
@@ -363,7 +430,9 @@ class Youtube:
         if not url:
             logging.error("Needs an URL")
             return ErrorMessages.NO_URL, 400
-        if not Utils.is_valid_link(url):
+
+        url = Utils.get_valid_link(url)
+        if not url:
             logging.error(f"Invalid URL: {url}")
             return ErrorMessages.INVALID_URL, 400
 
