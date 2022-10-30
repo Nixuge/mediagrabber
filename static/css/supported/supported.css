@@ -1,10 +1,26 @@
+/* Fix the scrollbar heights for chrome */
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:active {
+    border: 1px solid transparent;
+}
+
+
 .container {
     padding-top: 20px;
 }
 
 .website_div {
     border-radius: 5px 5px 5px 5px;
-    
+
     padding-right: 10px;
     background-color: #1a1a1a;
     width: 60%;
@@ -40,4 +56,15 @@
     padding: 5px;
     width: 70%;
     font-weight: bold;
+}
+
+/* From https://www.browserstack.com/guide/create-browser-specific-css */
+/* Safari 11+ */
+/* Not trying anymore, safari is just inconsistent garbage. */
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) and (stroke-color:transparent) {
+        .info {
+            display: inline-block;
+        }
+    }
 }
