@@ -1,7 +1,6 @@
 from flask import render_template, redirect
 
 from utils.variables import Global, Constants
-from utils.error_messages import ErrorMessages
 
 app = Global.app
 
