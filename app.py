@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 from gevent.pywsgi import WSGIServer
-import server
+import setup
 
 from cleaning.cleaner import Cleaner
 from utils.variables import Global
