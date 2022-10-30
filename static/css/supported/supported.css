@@ -7,16 +7,33 @@
     
     padding-right: 10px;
     background-color: #1a1a1a;
-    width: 50%;
+    width: 60%;
     margin: 5px auto auto auto;
+    transition: width .1s ease-in-out;
+    white-space: nowrap;
+}
+
+@media only screen and (max-width: 1300px) {
+    .website_div {
+        width: 90%;
+        transition: width .4s cubic-bezier(0.215, 0.610, 0.355, 1);
+    }
 }
 
 .name {
-    text-align: center;
-    display: inline-block;
+    justify-content: center;
+    overflow: scroll;
+    display: inline-flex;
+
     padding: 5px;
     width: 30%;
     font-weight: bold;
+}
+
+.info {
+    overflow: scroll;
+    max-width: 68%;
+    display: inline-flex;
 }
 
 #moreinfo {
