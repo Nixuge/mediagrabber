@@ -22,7 +22,7 @@
 
 .name {
     justify-content: center;
-    overflow: scroll;
+    overflow: auto;
     display: inline-flex;
 
     padding: 5px;
@@ -31,7 +31,7 @@
 }
 
 .info {
-    overflow: scroll;
+    overflow: auto;
     max-width: 68%;
     display: inline-flex;
 }
