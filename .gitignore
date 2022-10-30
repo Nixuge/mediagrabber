@@ -3,4 +3,4 @@
 /tests
 /videos
 logs/
-
+*.pyc
