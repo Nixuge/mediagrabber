@@ -1,17 +1,17 @@
 #!/usr/local/bin/python3
 
+from asyncio.log import logger
 from dataclasses import dataclass
 import threading
 from typing import Optional
 from flask import Flask, request, send_file, render_template, redirect, send_from_directory, wrappers
-from numpy import mat
 import yt_dlp as ytdl
 import time
 import os
 import logging
 import re
 from datetime import timedelta
-
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 CAV = f"v2.2"  # Current API version
@@ -40,56 +40,60 @@ class ErrorMessages:
     INVALID_URL = "Invalid URL. Refeer to <a href=\"/supported\">this page</a> for a list of supported websites."
 
 
-class Regexes:
-    # https://stackoverflow.com/a/37704433
-    YOUTUBE = "^((?:https?:)?\/\/)?((?:music|www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
-
-
 class Matcher:
-    def __init__(self, to_match):
-        self.to_match = to_match
+    domain_table = {
+        "reddit": ["redd.it", "reddit.com", "reddit.fr"],
+        "twitter": ["twitter.com", "twttr.com", "t.co", "twimg.com", "twitpic.com", "twitter.co", "twitter.fr"],
+        "instagram": ["instagram.com", "instagram.fr"],
+        "snapchat": ["snapchat.com"],
+        "facebook": ["acebook.com","faacebook.com","facebbook.com","facebook.co","facebook.com","facebook.com.au","facebook.com.mx","facebook.it","facebook.net","fb.audio","fb.com","fb.gg","fb.me","fb.watch","fbcdn.net","internet.org"],
+    }
 
-    def get_result_link(self) -> bool | str:
-        internal_matchers = [
-            self._match_youtube
+    def __init__(self, to_match):
+        parsed_url = urlparse(to_match)
+        self.link = to_match
+        self.hostname = parsed_url.netloc
+        self.domain = '.'.join(self.hostname.split('.')[-2:])
+        self.custom_matchers = [
+            self._custom_match_youtube,
         ]
 
-        for internal_matcher in internal_matchers:
-            result = internal_matcher()
+    def get_result_link(self) -> bool | str:
+        for custom_matcher in self.custom_matchers:
+            result = custom_matcher()
             if result: return result
 
-    def _match_youtube(self):
-        full = ""
-        match = re.fullmatch(Regexes.YOUTUBE, self.to_match)
+        for website, domains in self.domain_table:
+            if self.domain in domains:
+                logger.debug(f"Matched {website} for URL {self.link}")
+                return self.link
+
+        return False
+
+    def _custom_match_youtube(self):
+        # https://stackoverflow.com/a/37704433
+        regex = "^((?:https?:)?\/\/)?((?:music|www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
+
+        match = re.fullmatch(regex, self.link)
         if not match: 
             return False
 
+        full = ""
         for group in match.groups():
             if not group or group[:5] in ["&list", "?list"]: continue
             full += group
-
+        
+        logger.debug(f"Custom matched Youtube for URL {full} (from {self.link})")
         return full
     
-    def _match_reddit(self):
-        return self.to_match
-    
-    def _match_twitter(self):
-        return self.to_match
-    
-    def _match_instagram(self):
-        return self.to_match
     
     def _match_ph(self):
-        return self.to_match
-    
-    def _match_snap(self):
-        return self.to_match
+        #TODO
+        return self.link
     
     def _match_odysee(self):
-        return False
-    
-    def _match_facebook(self):
-        return self.to_match
+        #TODO
+        return self.link
 
 
 class Utils:
@@ -118,12 +122,7 @@ class Utils:
     def get_valid_link(link: str) -> bool | str:
         # long function to determine if a link is valid
         # prefer to take out a bit of perfs at the cost of avoiding as much exploits as I can
-        matcher = Matcher(link)
-
-        result = matcher.get_result_link()
-        print(result)
-
-        return result
+        return Matcher(link).get_result_link()
 
 
 class Website:

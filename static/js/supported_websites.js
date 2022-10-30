@@ -9,15 +9,15 @@ class Website {
 }
 
 const websites = [
-    new Website("Youtube", "No playlist, working fine.", "rgba(255, 0, 0, 1)"),
+    new Website("Youtube", "Working fine, may be missing domains.", "rgba(255, 0, 0, 1)"),
     new Website("Youtube Music", "Same as Youtube.", "rgba(255, 0, 0, 1)"),
     new Website("Reddit", "Working fine.", "rgba(255, 67, 0, 1)"),
-    new Website("Twitter", "First media only when multiple in a tweet.", "rgba(29, 161, 242, 1)"),
+    new Website("Twitter", "First media only when multiple in a tweet, may be missing domains.", "rgba(29, 161, 242, 1)"),
     new Website("Instagram", "First media only when multiple available.", "rgba(221, 42, 123, 1)"),
-    new Website("Youtube Kids", "Working fine.", "rgba(255, 163, 26, 1)"),
+    new Website("Youtube Kids", "Disabled for now, need to disable playlists.", "rgba(255, 163, 26, 1)"),
     new Website("Snapchat", "Limited to content you can share with a link (eg. spotlight).", "rgba(255, 252, 0, 1)"),
-    new Website("Odysee", "Working fine.", "rgba(192, 4, 78, 1)"),
-    new Website("Facebook", "Working fine.", "rgba(66, 103, 178, 1)"),
+    new Website("Odysee", "Disabled for now, need to disable playlists.", "rgba(192, 4, 78, 1)"),
+    new Website("Facebook", "Working fine, may be missing domains.", "rgba(66, 103, 178, 1)"),
 ]
 websites.forEach(website => 
     website_wrapper.innerHTML += generate_website_div(website)
