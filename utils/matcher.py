@@ -30,7 +30,7 @@ class Matcher:
             result = custom_matcher()
             if result: return result
 
-        for website, domains in self.domain_table:
+        for website, domains in self.domain_table.items():
             if self.domain in domains:
                 logging.debug(f"Matched {website} for URL {self.link}")
                 return self.link
