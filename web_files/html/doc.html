@@ -178,7 +178,7 @@
                 </span>
             </div>
         </div>
-        
+
         <div id="get_video_endpoint">
             <div class="endpoint GET" onclick="toggle_api('endpointInfo_get_video_endpoint')">
                 <span class="method GET">GET</span>
@@ -206,13 +206,19 @@
                         <td>URL to download.</td>
                     </tr>
                     <tr>
-                        <td>format_extension</td>
+                        <td>Format-Extension</td>
                         <td>False</td>
                         <td>str</td>
-                        <td>Extension of the final file. mov if none provided.</td>
+                        <td>"merge_output_format" parameter for youtube-dlp. Final extension if no Extension-Replace provided</td>
                     </tr>
                     <tr>
-                        <td>dont_retry_as_mkv</td>
+                        <td>Extension-Replace</td>
+                        <td>False</td>
+                        <td>str</td>
+                        <td>Extension of the final file. Doesn't change any data, just the filename. Useful to rename .mkv (from format extension) to mov (apple) or mp4 (everything else)</td>
+                    </tr>
+                    <tr>
+                        <td>Dont-Retry-As-Mkv</td>
                         <td>False</td>
                         <td>any</td>
                         <td>Avoid retrying with mkv as the merge format if something fails.</td>

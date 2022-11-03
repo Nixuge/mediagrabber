@@ -11,7 +11,7 @@ from cleaning.video import Video
 from utils.variables import Global, Constants
 
 
-def download_video(merge_output_format, format_id, url, force_to_format: str = "mov"):
+def download_video(merge_output_format, format_id, url, extension_replace: str = ""):
     CURRENT_TIME = time.time_ns()
     Cleaner.addVideo(Video(CURRENT_TIME))
 
@@ -28,7 +28,7 @@ def download_video(merge_output_format, format_id, url, force_to_format: str = "
 
     logging.debug(f"Downloading video {url}")
     logging.debug(
-        f"Output: {merge_output_format}, Force to: {force_to_format}, ID: {format_id}")
+        f"Output: {merge_output_format}, Extension replace: {extension_replace}, ID: {format_id}")
 
     # handle if audio format
     with ytdl.YoutubeDL(ydl_opts) as ydl:
@@ -53,8 +53,8 @@ def download_video(merge_output_format, format_id, url, force_to_format: str = "
     EXTENSION = FILE_NAME.split(".")[-1]
 
     # dirty fix since apple doesn't want to save anything except .movs (& gifs) even if the codecs work
-    if force_to_format and not EXTENSION in ["gif"] and merge_output_format != "mkv":
-        DOWNLOAD_NAME = FILE_NAME.replace(EXTENSION, force_to_format)
+    if extension_replace and not EXTENSION in ["gif"] and merge_output_format != "mkv":
+        DOWNLOAD_NAME = FILE_NAME.replace(EXTENSION, extension_replace)
         return send_file(f"{Constants.VIDEOS_PATH}/{FILE_NAME}", download_name=f"{DOWNLOAD_NAME}")
 
     return send_file(f"{Constants.VIDEOS_PATH}/{FILE_NAME}", download_name=f"{FILE_NAME}")

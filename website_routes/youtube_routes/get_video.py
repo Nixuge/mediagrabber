@@ -29,20 +29,24 @@ def get_video():
 
     format_extension = data.get("Format-Extension")
     if not format_extension:
-        format_extension = "mov"
+        format_extension = "mkv"
+    
+    extension_replace = data.get("Extension-Replace")
+    if not extension_replace:
+        extension_replace = ""
 
     # setup that way so that by default it retries as a mkv (which supports pretty much everything)
-    dont_retry_as_mkv = data.get("Dont_Retry_As_Mkv")
+    dont_retry_as_mkv = data.get("Dont-Retry-As-Mkv")
 
     try:
-        return download_video(format_extension, format_id, url)
+        return download_video(format_extension, format_id, url, extension_replace=extension_replace)
     except Exception as e:
         logging.warning(f"Failed as a {format_extension} ({e})")
-        if dont_retry_as_mkv:
+        if dont_retry_as_mkv or format_extension == "mkv":
             return f"{e}", 400
         else:
             logging.debug("Retrying as mkv")
             try:
-                return download_video("mkv", format_id, url)
+                return download_video("mkv", format_id, url, extension_replace=extension_replace)
             except Exception as e:
                 return f"Exception happened! {e}", 400

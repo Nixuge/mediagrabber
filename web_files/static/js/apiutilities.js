@@ -39,6 +39,7 @@ class APIUtilities {
 
         const headers_dict = {
             'Format-Extension': 'mkv',
+            'Extension-Replace': 'mp4',
             'Requested-Url': requested_url,
             'Id': id
         };
