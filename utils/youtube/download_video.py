@@ -12,12 +12,12 @@ from utils.variables import Global, Constants
 
 
 def download_video(merge_output_format, format_id, url, extension_replace: str = ""):
-    CURRENT_TIME = time.time_ns()
-    Cleaner.addVideo(Video(CURRENT_TIME))
+    current_time = time.time_ns()
+    Cleaner.addVideo(Video(current_time))
 
     ydl_opts = {
         # .mov needed or else apple doesn't recognize it as a video (thanks apple)
-        "outtmpl": f"{Constants.VIDEOS_PATH}/{CURRENT_TIME}.%(ext)s",
+        "outtmpl": f"{Constants.VIDEOS_PATH}/{current_time}.%(ext)s",
         "merge_output_format": merge_output_format,
         "ffmpeg_location": "/usr/bin/ffmpeg",
         "quiet": True,
@@ -38,23 +38,23 @@ def download_video(merge_output_format, format_id, url, extension_replace: str =
     logging.debug(f"Done downloading {url}")
 
     # get the filemane in a dirty way since yt-dlp doesn't let us get it easily
-    FILE_NAME: str
+    file_name: str
     for file in os.listdir(Constants.VIDEOS_PATH):
-        if str(CURRENT_TIME) in file:
-            FILE_NAME = file
+        if str(current_time) in file:
+            file_name = file
 
-    logging.debug(f"Final filename: {FILE_NAME}")
+    logging.debug(f"Final filename: {file_name}")
 
     # if audio return as m4a, else return as mov
+    # TODO: remove dirty apple fix
     for f in formats:
         if f.get("format_id") == format_id and f.get("resolution") == "audio only":
-            return send_file(f"{Constants.VIDEOS_PATH}/{FILE_NAME}", download_name=f"{FILE_NAME}")
+            return send_file(f"{Constants.VIDEOS_PATH}/{file_name}", download_name=f"{file_name}")
 
-    EXTENSION = FILE_NAME.split(".")[-1]
+    extension = file_name.split(".")[-1]
 
-    # dirty fix since apple doesn't want to save anything except .movs (& gifs) even if the codecs work
-    if extension_replace and not EXTENSION in ["gif"] and merge_output_format != "mkv":
-        DOWNLOAD_NAME = FILE_NAME.replace(EXTENSION, extension_replace)
-        return send_file(f"{Constants.VIDEOS_PATH}/{FILE_NAME}", download_name=f"{DOWNLOAD_NAME}")
+    download_name = file_name
+    if extension_replace:
+        download_name = file_name.replace(extension, extension_replace)
 
-    return send_file(f"{Constants.VIDEOS_PATH}/{FILE_NAME}", download_name=f"{FILE_NAME}")
+    return send_file(f"{Constants.VIDEOS_PATH}/{file_name}", download_name=f"{download_name}")

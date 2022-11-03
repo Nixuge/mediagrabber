@@ -23,7 +23,7 @@
             <div id="all_buttons">
                 <div class="button_group">
                     <a class="button biggerfont"
-                        href="https://www.icloud.com/shortcuts/2784ecd0f660442597d0aef2290cb71c">
+                        href="https://www.icloud.com/shortcuts/97e225b818c5412bae5bd463a6b50d3b">
                         <div id="latestButton" class="innerbutton">Download latest version</div>
                     </a>
                 </div>
@@ -53,6 +53,32 @@
             <h1>Changelog</h1>
 
             <div id="legacyReleases" class="biggerfont">
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v2.2.1</span>
+                    <span class="releaseDate">(03/11/2022)</span>
+                    <a class="button right" href="https://www.icloud.com/shortcuts/97e225b818c5412bae5bd463a6b50d3b">
+                        <div class="innerbutton noanimation lessimportant">Download</div>
+                    </a>
+                    <ul>
+                        <li>Reworked headers for get_video endpoint<ul>
+                                <li>Format-Extension -> format fed to yt-dlp</li>
+                                <li>Extension-Replace -> format of the file returned</li>
+                                <li><i>See the doc for more info</i></li>
+                            </ul>
+                        </li>
+                        <li>Server no longer downloads as a .mov by default anymore, now:<ul>
+                                <li>Default format if the file doesn't need to be merged with ffmpeg</li>
+                                <li>.mkv if the file does need to be merged</li>
+                            </ul>
+                        </li>
+                        <li>Web interface should now return a .mp4</li>
+                        <li>Server cleanup</li>
+                        <li>Server fixes</li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.2</span>
                     <span class="releaseDate">(29/10/2022)</span>
