@@ -5,15 +5,14 @@ from utils.variables import Global, Constants
 app = Global.app
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/<path:path>', defaults={'path': ''})
 def catch_all(path):
     return redirect("/", code=302)
 
 
+@app.route("/")
 @app.route("/index")
 @app.route("/index.html")
-@app.route("/")
 def index():
     return render_template("index.html", current_api_version=Constants.CAV)
 
