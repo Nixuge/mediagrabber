@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/bin/python3
 from gevent.pywsgi import WSGIServer
 import setup
 

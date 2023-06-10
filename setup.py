@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/bin/python3
 import logging
 
 from utils.logger import set_logger_levels
