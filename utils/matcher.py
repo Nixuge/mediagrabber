@@ -10,7 +10,7 @@ def get_valid_link(link: str) -> bool | str:
 class Matcher:
     domain_table = {
         "reddit": ["redd.it", "reddit.com", "reddit.fr"],
-        "twitter": ["twitter.com", "twttr.com", "t.co", "twimg.com", "twitpic.com", "twitter.co", "twitter.fr"],
+        "twitter": ["x.com", "twitter.com", "twttr.com", "t.co", "twimg.com", "twitpic.com", "twitter.co", "twitter.fr"],
         "instagram": ["instagram.com", "instagram.fr"],
         "snapchat": ["snapchat.com"],
         "facebook": ["acebook.com","faacebook.com","facebbook.com","facebook.co","facebook.com","facebook.com.au","facebook.com.mx","facebook.it","facebook.net","fb.audio","fb.com","fb.gg","fb.me","fb.watch","fbcdn.net","internet.org"],
