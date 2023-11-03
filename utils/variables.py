@@ -4,7 +4,7 @@ from flask import Flask
 
 
 class Constants:
-    CSV = f"v2.3" # Current Script version
+    CSV = f"v2.3.1" # Current Script version
     CAV = f"v2.3"  # Current API version
     VIDEOS_PATH = os.path.abspath('videos')
 
