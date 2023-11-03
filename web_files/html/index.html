@@ -23,7 +23,7 @@
             <div id="all_buttons">
                 <div class="button_group">
                     <a class="button biggerfont"
-                        href="https://www.icloud.com/shortcuts/97e225b818c5412bae5bd463a6b50d3b">
+                        href="https://www.icloud.com/shortcuts/53d7250736ac4964a799a4c1bc73558a">
                         <div id="latestButton" class="innerbutton">Download latest version</div>
                     </a>
                 </div>
@@ -53,6 +53,39 @@
             <h1>Changelog</h1>
 
             <div id="legacyReleases" class="biggerfont">
+                <div class="releaseTableView">
+                    <span class="releaseVersion">v2.3</span>
+                    <span class="releaseDate">(03/11/2023)</span>
+                    <a class="button right" href="https://www.icloud.com/shortcuts/53d7250736ac4964a799a4c1bc73558a">
+                        <div class="innerbutton noanimation lessimportant">Download</div>
+                    </a>
+                    <ul>
+                        <li>Added Flags<ul>
+                            <li>The method to enable the flags is temporary, and is located inside of the script in the first text paragraph</li>
+                            <li>Currently available flags</li>
+                            <ul>
+                                <li>BACKTOAPP -> closes the share sheet automatically after starting the shortcut (works on Twitter & Reddit for now).</li>
+                                <li>SKIPQUALITYCHECK -> auto choose the best quality to save without prompting you.</li>
+                            </ul>
+                        </ul>
+                        </li>
+                        <li>Changed versioning system. Now in vX.Y.Z in which<ul>
+                                <li>X is the major version, almost won't change</li>
+                                <li>Y is the minor version, changes on API update</li>
+                                <li>Z is the shortcut subversion, changes on shortcut updates</li>
+                            </ul>
+                            Meaning for example if we're at v2.3:<ul>
+                                <li>If I update the API we get to v2.4,</li>
+                                <li>Then the script v2.4.1 (& if again v2.4.2, v2.4.3, ...)</li>
+                                <li>Then the API again v2.5</li>
+                            </ul>
+                        </li>
+                        <li>Updated yt-dlp multiple times (2022.10.4 -> 2023.10.13)</li>
+                    </ul>
+                </div>
+
+                <hr class="solid">
+
                 <div class="releaseTableView">
                     <span class="releaseVersion">v2.2.1</span>
                     <span class="releaseDate">(03/11/2022)</span>
