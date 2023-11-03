@@ -16,15 +16,27 @@
         <h1><a href="/" style="left: 0px; position: absolute;">Go back</a></h1><br>
         <h1>API documentation</h1>
 
-        <div id="get_current_version">
-            <div class="endpoint GET" onclick="toggle_api('endpointInfo_get_current_version')">
+        <div id="get_latest_shortcut_version">
+            <div class="endpoint GET" onclick="toggle_api('endpointInfo_get_latest_shortcut_version')">
+                <span class="method GET">GET</span>
+                <span>/api/get_latest_shortcut_version</span>
+            </div>
+            <div id="endpointInfo_get_latest_shortcut_version" class="endpointInfo">
+                <h3 class="underline">Result</h3>
+                <span>The endpoint should return the current Shortcut version as a simple string<br>As an example:
+                    v2.3.1</span>
+            </div>
+        </div>
+
+        <div id="get_api_version">
+            <div class="endpoint GET" onclick="toggle_api('endpointInfo_get_api_version')">
                 <span class="method GET">GET</span>
                 <span>/api/get_current_version</span>
             </div>
-            <div id="endpointInfo_get_current_version" class="endpointInfo">
+            <div id="endpointInfo_get_api_version" class="endpointInfo">
                 <h3 class="underline">Result</h3>
-                <span>The endpoint should return the current API/Script version as a simple string<br>As an example:
-                    v2.1</span>
+                <span>The endpoint should return the current API version as a simple string<br>As an example:
+                    v2.3</span>
             </div>
         </div>
 
