@@ -13,8 +13,8 @@ def catch_all_api(path):
 
 
 @app.route("/api/get_current_version") # compatibility purposes
-@app.route("/api/get_latest_script_version") # actual new route
-def get_latest_script_version():
+@app.route("/api/get_latest_shortcut_version") # actual new route
+def get_latest_shortcut_version():
     return Constants.CSV
 
 
