@@ -1,0 +1,3 @@
+gevent
+yt_dlp
+flask

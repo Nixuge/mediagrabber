@@ -1,4 +1,4 @@
-#!/bin/python3
+#!./venv/bin/python
 import logging
 from gevent.pywsgi import WSGIServer
 from yt_dlp import version

@@ -39,7 +39,7 @@ class Matcher:
 
     def _custom_match_youtube(self):
         # https://stackoverflow.com/a/37704433
-        regex = "^((?:https?:)?\/\/)?((?:music|www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
+        regex = r"^((?:https?:)?\/\/)?((?:music|www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
 
         match = re.fullmatch(regex, self.link)
         if not match: 
