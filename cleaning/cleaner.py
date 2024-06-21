@@ -28,6 +28,7 @@ class Cleaner:
     @staticmethod
     def threadFunc() -> None:  # could make it as a diff class but honestly no need
         logging.info("Cleaner thread started")
+        os.makedirs(Cleaner.videos_path)
         while True:
             current_time = time.time_ns()
 
